@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-white text-gray-900 font-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans font-bold;
+  }
+}
+
+@layer components {
+  .newspaper-header {
+    @apply text-4xl md:text-6xl font-bold text-center border-b-4 border-canadian-red py-4;
+    font-family: 'Georgia', serif;
+    letter-spacing: 0.05em;
+  }
+
+  .article-card {
+    @apply border-b border-gray-300 pb-6 mb-6 last:border-b-0;
+  }
+
+  .category-tag {
+    @apply inline-block bg-canadian-red text-white px-3 py-1 text-xs font-sans font-semibold uppercase tracking-wide;
+  }
+
+  .prose-newspaper {
+    @apply prose prose-lg max-w-none;
+    @apply prose-headings:font-sans prose-headings:font-bold;
+    @apply prose-a:text-canadian-red prose-a:no-underline hover:prose-a:underline;
+    @apply prose-p:leading-relaxed prose-p:text-justify;
+  }
+}

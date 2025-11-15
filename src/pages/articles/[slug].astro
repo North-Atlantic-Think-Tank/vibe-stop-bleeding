@@ -1,0 +1,161 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Chart from '../../components/charts/Chart';
+import { readdir, readFile } from 'fs/promises';
+import { join } from 'path';
+
+export async function getStaticPaths() {
+  try {
+    const articlesDir = join(process.cwd(), 'content/articles');
+    const files = await readdir(articlesDir);
+
+    return files
+      .filter(file => file.endsWith('.json'))
+      .map(file => ({
+        params: { slug: file.replace('.json', '') },
+      }));
+  } catch (error) {
+    console.error('Error loading articles for static paths:', error);
+    return [];
+  }
+}
+
+const { slug } = Astro.params;
+
+// Load article data
+async function getArticle(slug: string) {
+  try {
+    const filePath = join(process.cwd(), 'content/articles', `${slug}.json`);
+    const content = await readFile(filePath, 'utf-8');
+    return JSON.parse(content);
+  } catch (error) {
+    console.error('Error loading article:', error);
+    return null;
+  }
+}
+
+const article = await getArticle(slug!);
+
+if (!article) {
+  return Astro.redirect('/404');
+}
+
+const formattedDate = new Date(article.date).toLocaleDateString('en-CA', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+
+const readingTime = `${Math.ceil(article.content?.split(' ').length / 200)} min read`;
+
+const categoryColors: Record<string, string> = {
+  politics: 'bg-blue-600',
+  economy: 'bg-green-600',
+  employment: 'bg-purple-600',
+  education: 'bg-orange-600',
+  general: 'bg-gray-600'
+};
+
+const bgColor = categoryColors[article.category.toLowerCase()] || categoryColors.general;
+---
+
+<BaseLayout
+  title={`${article.title} - stopbleeding.ca`}
+  description={article.content ? article.content.split('\n\n')[0].substring(0, 160) : ''}
+>
+  <Header />
+
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <article>
+      <!-- Article Header -->
+      <header class="mb-8 pb-8 border-b-2 border-gray-300">
+        <span class={`category-tag ${bgColor}`}>
+          {article.category}
+        </span>
+
+        <h1 class="text-4xl md:text-5xl font-bold mt-4 mb-4 leading-tight">
+          {article.title}
+        </h1>
+
+        <div class="flex items-center gap-4 text-sm text-gray-600 font-sans">
+          <time datetime={article.date}>{formattedDate}</time>
+          <span>•</span>
+          <span>{readingTime}</span>
+          {article.tags && article.tags.length > 0 && (
+            <>
+              <span>•</span>
+              <div class="flex gap-2">
+                {article.tags.map((tag: string) => (
+                  <span class="text-canadian-red">#{tag}</span>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      </header>
+
+      <!-- Article Content -->
+      <div class="prose-newspaper">
+        {article.content.split('\n\n').map((paragraph: string) => (
+          <p class="mb-4">{paragraph}</p>
+        ))}
+      </div>
+
+      <!-- Charts Section -->
+      {article.charts && article.charts.length > 0 && (
+        <section class="mt-12">
+          <h2 class="text-3xl font-bold font-sans mb-6">Data Analysis</h2>
+          {article.charts.map((chart: any, index: number) => (
+            <Chart key={index} chart={chart} client:load />
+          ))}
+        </section>
+      )}
+
+      <!-- Sources Section -->
+      {article.sources && article.sources.length > 0 && (
+        <section class="mt-12 pt-8 border-t border-gray-300">
+          <h2 class="text-2xl font-bold font-sans mb-4">Sources</h2>
+          <ul class="space-y-2">
+            {article.sources.map((source: any, index: number) => (
+              <li class="text-sm">
+                <a
+                  href={source.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-canadian-red hover:underline"
+                >
+                  {source.title || source.name}
+                </a>
+                {source.publication && (
+                  <span class="text-gray-600"> - {source.publication}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <!-- Related Articles / Navigation -->
+      <nav class="mt-12 pt-8 border-t border-gray-300">
+        <div class="flex justify-between items-center">
+          <a
+            href={`/category/${article.category.toLowerCase()}`}
+            class="text-canadian-red font-sans font-semibold hover:underline"
+          >
+            ← More {article.category} Articles
+          </a>
+          <a
+            href="/"
+            class="text-canadian-red font-sans font-semibold hover:underline"
+          >
+            Back to Home
+          </a>
+        </div>
+      </nav>
+    </article>
+  </main>
+
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,140 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { readdir, readFile } from 'fs/promises';
+import { join } from 'path';
+
+// Function to get all articles
+async function getArticles() {
+  try {
+    const articlesDir = join(process.cwd(), 'content/articles');
+    const files = await readdir(articlesDir);
+
+    const articles = await Promise.all(
+      files
+        .filter(file => file.endsWith('.json'))
+        .map(async (file) => {
+          const filePath = join(articlesDir, file);
+          const content = await readFile(filePath, 'utf-8');
+          const article = JSON.parse(content);
+
+          // Extract excerpt from content (first paragraph)
+          const excerpt = article.content
+            ? article.content.split('\n\n')[0].substring(0, 200) + '...'
+            : '';
+
+          return {
+            ...article,
+            slug: file.replace('.json', ''),
+            excerpt,
+            readingTime: `${Math.ceil(article.content?.split(' ').length / 200)} min read`
+          };
+        })
+    );
+
+    // Sort by date, newest first
+    return articles.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  } catch (error) {
+    console.error('Error loading articles:', error);
+    return [];
+  }
+}
+
+const allArticles = await getArticles();
+const featuredArticle = allArticles[0];
+const recentArticles = allArticles.slice(1, 11); // Next 10 articles
+---
+
+<BaseLayout>
+  <Header />
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Featured Article Section -->
+    {featuredArticle && (
+      <section class="mb-16 pb-16 border-b-2 border-gray-300">
+        <div class="text-center mb-8">
+          <h2 class="text-sm font-sans font-bold uppercase tracking-wider text-gray-600 mb-4">
+            Featured Analysis
+          </h2>
+        </div>
+        <ArticleCard
+          title={featuredArticle.title}
+          date={featuredArticle.date}
+          category={featuredArticle.category}
+          excerpt={featuredArticle.excerpt}
+          slug={featuredArticle.slug}
+          readingTime={featuredArticle.readingTime}
+        />
+      </section>
+    )}
+
+    <!-- Recent Articles Section -->
+    <section>
+      <div class="flex items-center justify-between mb-8">
+        <h2 class="text-3xl font-bold font-sans">Latest Analysis</h2>
+        <a
+          href="/archive"
+          class="text-canadian-red font-sans font-semibold text-sm uppercase tracking-wide hover:underline"
+        >
+          View All Articles
+        </a>
+      </div>
+
+      {recentArticles.length > 0 ? (
+        <div class="space-y-8">
+          {recentArticles.map((article) => (
+            <ArticleCard
+              title={article.title}
+              date={article.date}
+              category={article.category}
+              excerpt={article.excerpt}
+              slug={article.slug}
+              readingTime={article.readingTime}
+            />
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-16">
+          <p class="text-gray-600 text-lg">
+            No articles published yet. Check back soon for Canadian news analysis!
+          </p>
+        </div>
+      )}
+    </section>
+
+    <!-- Categories Quick Links -->
+    <section class="mt-16 pt-16 border-t-2 border-gray-300">
+      <h2 class="text-2xl font-bold font-sans mb-6">Browse by Category</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <a
+          href="/category/politics"
+          class="bg-blue-600 text-white p-6 text-center font-sans font-bold uppercase tracking-wide hover:bg-blue-700 transition-colors"
+        >
+          Politics
+        </a>
+        <a
+          href="/category/economy"
+          class="bg-green-600 text-white p-6 text-center font-sans font-bold uppercase tracking-wide hover:bg-green-700 transition-colors"
+        >
+          Economy
+        </a>
+        <a
+          href="/category/employment"
+          class="bg-purple-600 text-white p-6 text-center font-sans font-bold uppercase tracking-wide hover:bg-purple-700 transition-colors"
+        >
+          Employment
+        </a>
+        <a
+          href="/category/education"
+          class="bg-orange-600 text-white p-6 text-center font-sans font-bold uppercase tracking-wide hover:bg-orange-700 transition-colors"
+        >
+          Education
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

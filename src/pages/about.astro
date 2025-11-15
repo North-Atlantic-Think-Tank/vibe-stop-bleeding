@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="About Us - stopbleeding.ca"
+  description="Learn about stopbleeding.ca, Canada's AI-powered news analysis platform"
+>
+  <Header />
+
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <article class="prose-newspaper">
+      <h1 class="text-4xl md:text-5xl font-bold mb-8 text-center">About stopbleeding.ca</h1>
+
+      <div class="space-y-6">
+        <p>
+          Welcome to <strong>stopbleeding.ca</strong>, Canada's premier AI-powered news analysis platform.
+          We deliver data-driven insights on the most important issues affecting Canadians today.
+        </p>
+
+        <h2 class="text-3xl font-bold mt-8 mb-4">Our Mission</h2>
+        <p>
+          In an era of information overload, we cut through the noise to provide clear, analytical
+          coverage of Canadian politics, economy, employment, and education. Our AI-powered approach
+          combines multiple sources, statistical data, and expert perspectives to give you comprehensive
+          understanding of the news that matters.
+        </p>
+
+        <h2 class="text-3xl font-bold mt-8 mb-4">How We Work</h2>
+        <p>
+          Our platform uses advanced AI technology to research trending Canadian topics, analyze data
+          from reliable sources, and generate in-depth articles that provide context and perspective.
+          Each article includes:
+        </p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li>Multiple verified Canadian sources (CBC, Globe and Mail, Statistics Canada, etc.)</li>
+          <li>Data visualizations and charts for key statistics</li>
+          <li>Analysis from multiple perspectives</li>
+          <li>800-1500 word comprehensive coverage</li>
+        </ul>
+
+        <h2 class="text-3xl font-bold mt-8 mb-4">Our Coverage Areas</h2>
+        <div class="grid md:grid-cols-2 gap-6 my-6">
+          <div class="bg-blue-50 p-6 border-l-4 border-blue-600">
+            <h3 class="font-bold text-xl mb-2">Politics</h3>
+            <p class="text-sm">Federal, provincial, and municipal political developments across Canada.</p>
+          </div>
+          <div class="bg-green-50 p-6 border-l-4 border-green-600">
+            <h3 class="font-bold text-xl mb-2">Economy</h3>
+            <p class="text-sm">Economic trends, GDP, inflation, and financial market analysis.</p>
+          </div>
+          <div class="bg-purple-50 p-6 border-l-4 border-purple-600">
+            <h3 class="font-bold text-xl mb-2">Employment</h3>
+            <p class="text-sm">Job market insights, unemployment rates, and workforce trends.</p>
+          </div>
+          <div class="bg-orange-50 p-6 border-l-4 border-orange-600">
+            <h3 class="font-bold text-xl mb-2">Education</h3>
+            <p class="text-sm">Education policy, funding, and institutional changes.</p>
+          </div>
+        </div>
+
+        <h2 class="text-3xl font-bold mt-8 mb-4">Transparency & Ethics</h2>
+        <p>
+          We believe in transparency. Every article clearly cites its sources and presents multiple
+          perspectives. Our AI assists in research and writing, but all content is reviewed to ensure
+          accuracy, balance, and adherence to journalistic standards.
+        </p>
+
+        <h2 class="text-3xl font-bold mt-8 mb-4">Stay Connected</h2>
+        <p>
+          Subscribe to our <a href="/rss.xml" class="text-canadian-red hover:underline">RSS feed</a> to
+          stay updated with the latest Canadian news analysis. We publish new articles regularly,
+          covering the stories that shape our nation.
+        </p>
+
+        <div class="bg-gray-100 p-6 mt-8 rounded-lg border border-gray-300">
+          <p class="font-sans text-sm text-gray-700">
+            <strong>Contact:</strong> For questions, feedback, or inquiries, visit our
+            <a href="https://github.com/stopbleeding-ca" class="text-canadian-red hover:underline">GitHub repository</a>
+            or open an issue.
+          </p>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <Footer />
+</BaseLayout>
