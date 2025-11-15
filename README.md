@@ -1,297 +1,135 @@
-# stopbleeding.ca - AI Agent Team
+# stopbleeding.ca Website
 
-An AI-powered Canadian news analysis platform using autonomous agents for content creation and website management.
+Canadian news analysis platform built with Astro, React, and Tailwind CSS.
 
-## 🤖 Agent Team Structure
+## 🚀 Quick Start
 
-This project uses three specialized AI agents that work together:
+```bash
+# Install dependencies
+npm install
 
-### 1. **Editor Agent**
-- Researches Canadian news topics
-- Writes analysis articles (800-1500 words)
-- Provides data-driven insights
-- Focuses on: Politics, Economy, Employment, Education
+# Start development server
+npm run dev
 
-### 2. **Developer Agent**
-- Builds and maintains the website
-- Implements data visualizations
-- Handles deployment and automation
-- Tech stack: Astro, React, Tailwind CSS
+# Build for production
+npm run build
 
-### 3. **Workflow Coordinator**
-- Orchestrates agent collaboration
-- Manages daily publishing cycle
-- Handles data handoff between agents
-- Monitors workflow execution
+# Preview production build
+npm run preview
+```
 
 ## 📁 Project Structure
 
 ```
-vibe-stop-bleeding/
-├── agents/
-│   ├── editor/
-│   │   ├── prompt.md           # Editor agent system prompt
-│   │   ├── research.js         # Research trending topics
-│   │   ├── write.js            # Write full articles
-│   │   └── summary.js          # Generate briefing summaries
-│   ├── developer/
-│   │   ├── prompt.md           # Developer agent system prompt
-│   │   └── setup.js            # Development tasks
-│   ├── workflow/
-│   │   ├── prompt.md           # Workflow coordinator prompt
-│   │   ├── daily-cycle.js      # Automated daily publishing
-│   │   └── publish.js          # Article publishing
-│   └── shared/
-│       ├── orchestrator.js     # Multi-agent orchestration
-│       ├── types.js            # Data schemas
-│       ├── data-converter.js   # Format converters
-│       └── scheduler.js        # Automated scheduling
+/
+├── src/
+│   ├── components/      # Reusable components
+│   │   ├── Header.astro
+│   │   ├── Footer.astro
+│   │   ├── ArticleCard.astro
+│   │   └── charts/
+│   │       └── Chart.tsx (React chart component)
+│   ├── layouts/         # Page layouts
+│   │   └── BaseLayout.astro
+│   ├── pages/           # File-based routing
+│   │   ├── index.astro  # Homepage
+│   │   ├── about.astro  # About page
+│   │   ├── articles/
+│   │   │   └── [slug].astro  # Dynamic article pages
+│   │   └── category/
+│   │       └── [category].astro  # Category pages
+│   └── styles/
+│       └── global.css   # Global styles with Tailwind
 ├── content/
-│   ├── articles/               # Published articles
-│   └── drafts/                 # Draft content
-├── public/
-│   ├── images/                 # Article images
-│   └── data/                   # Chart data
-├── package.json
-├── .env.example
-└── README.md
+│   └── articles/        # Article JSON files
+├── public/              # Static assets
+└── astro.config.mjs     # Astro configuration
 ```
 
-## 🚀 Getting Started
+## 📝 Content Management
 
-### Prerequisites
+### Adding Articles
 
-- Node.js 18+
-- Anthropic API key (Claude)
-
-### Installation
-
-1. Clone the repository:
-```bash
-cd /Users/liwenzhi/web/vibe-stop-bleeding
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Set up environment variables:
-```bash
-cp .env.example .env
-# Edit .env and add your ANTHROPIC_API_KEY
-```
-
-## 📖 Usage
-
-### Editor Agent Tasks
-
-#### Research trending topics:
-```bash
-npm run editor:research
-```
-
-#### Research specific category:
-```bash
-npm run editor:research politics
-```
-
-#### Write an article:
-```bash
-npm run editor:write -- "Canadian employment trends Q1 2025"
-```
-
-#### Generate a briefing summary:
-```bash
-# From a topic
-npm run editor:summary -- "Canadian inflation trends 2024"
-
-# From a webpage URL
-npm run editor:summary -- "https://www.cbc.ca/news/politics/..."
-```
-
-This generates a concise briefing-style article (400-800 words) highlighting key facts, data, and conclusions from either a topic or webpage URL.
-
-### Workflow Tasks
-
-#### Run daily publishing cycle:
-```bash
-npm run workflow:daily
-```
-
-This will:
-1. Research trending Canadian topics
-2. Select top story
-3. Write full article with data
-4. Save as JSON in `content/articles/`
-
-#### Publish article:
-```bash
-npm run workflow:publish -- content/articles/2025-11-14-article.json
-```
-
-Converts JSON to markdown and prepares for web publishing.
-
-### Multi-Agent Orchestration
-
-For complex tasks requiring multiple agents:
-
-```bash
-node agents/shared/orchestrator.js "Research Canadian housing market trends and write an article with charts showing price changes over 3 years"
-```
-
-The orchestrator will:
-- Analyze the task
-- Determine which agents to involve
-- Coordinate execution
-- Save combined results
-
-## 🔄 Automated Workflows
-
-### Daily Publishing Cycle
-
-The workflow coordinator manages a daily schedule (Eastern Time):
-
-- **9 AM**: Research trending topics
-- **11 AM**: Draft article
-- **2 PM**: Finalize with data
-- **4 PM**: Publish to website
-- **6 PM**: Share on social media
-
-### Start Automated Scheduler
-
-```bash
-node agents/shared/scheduler.js
-```
-
-For production, use cron jobs:
-```bash
-# Run daily cycle at 9 AM ET
-0 9 * * * cd /path/to/project && npm run workflow:daily
-```
-
-## 📊 Data Format
-
-Articles use a standardized JSON format:
+Articles are stored as JSON files in `content/articles/` following this schema:
 
 ```json
 {
   "title": "Article Title",
-  "category": "politics|economy|employment|education",
-  "date": "2025-11-14",
-  "author": "stopbleeding.ca Editorial Team",
-  "summary": "Brief summary",
-  "content": "Full markdown content...",
+  "category": "politics|economy|employment|education|general",
+  "date": "YYYY-MM-DD",
+  "tags": ["tag1", "tag2"],
+  "content": "Article content in paragraphs...",
+  "sources": [
+    {
+      "title": "Source Title",
+      "url": "https://example.com",
+      "publication": "Publication Name"
+    }
+  ],
   "charts": [
     {
       "type": "line|bar|pie",
       "title": "Chart Title",
       "data": [...],
-      "config": {...}
+      "xKey": "name",
+      "yKey": "value"
     }
-  ],
-  "sources": [
-    {"title": "Source Name", "url": "https://..."}
-  ],
-  "tags": ["tag1", "tag2"],
-  "seo": {
-    "metaDescription": "...",
-    "keywords": [...]
-  }
+  ]
 }
 ```
 
-## 🛠️ Development
+### File Naming Convention
 
-### Add New Agent Capabilities
+Use format: `YYYY-MM-DD-slug.json`
 
-1. Create prompt file: `agents/[agent-name]/prompt.md`
-2. Implement execution script: `agents/[agent-name]/script.js`
-3. Update orchestrator to include new agent
+Example: `2025-01-14-sample-canadian-economy.json`
 
-### Customize Agent Prompts
+## 🎨 Design Features
 
-Edit the prompt files in each agent directory:
-- `agents/editor/prompt.md`
-- `agents/developer/prompt.md`
-- `agents/workflow/prompt.md`
+- **Newspaper-style layout**: Classic newspaper masthead and typography
+- **Canadian branding**: Red accent color (Canadian red #FF0000)
+- **Responsive design**: Mobile-first approach with Tailwind CSS
+- **Data visualization**: Interactive charts using Recharts
+- **Category filtering**: Dedicated pages for Politics, Economy, Employment, Education
+- **SEO optimized**: Meta tags, Open Graph, and sitemap support
 
-## 📝 Example Workflows
+## 🔧 Tech Stack
 
-### Create weekly content plan:
+- **Framework**: Astro 4.16
+- **UI Library**: React 18
+- **Styling**: Tailwind CSS 3.3 + Typography plugin
+- **Charts**: Recharts 2.10
+- **Content**: JSON-based with file system routing
+- **Deployment**: Static site (Vercel/Netlify compatible)
+
+## 📊 Chart Types
+
+The website supports three chart types:
+
+1. **Line Chart**: Trends over time (GDP growth, employment rates)
+2. **Bar Chart**: Comparisons (sector performance, provincial data)
+3. **Pie Chart**: Proportions (budget allocations, demographics)
+
+Charts are rendered using the `Chart.tsx` React component with Recharts.
+
+## 🌐 Pages
+
+- **/** - Homepage with featured and recent articles
+- **/category/[category]** - Category-filtered article lists
+- **/articles/[slug]** - Individual article pages with charts
+- **/about** - About page explaining the platform
+
+## 🚢 Deployment
+
+The site is configured for static deployment:
+
 ```bash
-npm run editor:research
-# Review output in content/drafts/research-YYYY-MM-DD.md
+npm run build
 ```
 
-### Write article on specific topic:
-```bash
-npm run editor:write -- "Impact of new federal budget on Canadian families"
-```
+Output in `docs/` directory is ready for deployment to:
+- Vercel
+- Netlify
+- Cloudflare Pages
+- Any static hosting service
 
-### Generate quick briefing from news article:
-```bash
-npm run editor:summary -- "https://www.cbc.ca/news/business/inflation-report-latest"
-```
-
-### Generate briefing on trending topic:
-```bash
-npm run editor:summary -- "Bank of Canada interest rate decision December 2024"
-```
-
-### Full end-to-end:
-```bash
-npm run workflow:daily
-```
-
-### Publish existing article:
-```bash
-npm run workflow:publish -- content/articles/2025-11-14-budget-analysis.json
-```
-
-## 🎯 Best Practices
-
-1. **Review AI output**: Always review articles before publishing
-2. **Fact-check**: Verify statistics and sources
-3. **Backup content**: All content is saved in JSON format
-4. **Monitor performance**: Check workflow logs regularly
-5. **Update prompts**: Refine agent prompts based on output quality
-
-## 🔐 Security
-
-- Never commit `.env` file
-- Keep API keys secure
-- Review generated content for accuracy
-- Implement content moderation for public sites
-
-## 📚 Additional Resources
-
-- [Anthropic Claude API Docs](https://docs.anthropic.com/)
-- [Astro Documentation](https://docs.astro.build/)
-- [Original prompt document](./stopbleeding_prompts.md)
-
-## 🚀 Next Steps
-
-1. Install dependencies: `npm install`
-2. Set up API key in `.env`
-3. Run first research: `npm run editor:research`
-4. Write first article: `npm run editor:write -- "Your topic"`
-5. Or generate a quick briefing: `npm run editor:summary -- "Your topic or URL"`
-6. Review output in `content/` directory
-7. Build website (see Developer Agent for implementation)
-
-## 📄 License
-
-MIT
-
-## 🤝 Contributing
-
-This is an AI agent system. To improve:
-1. Refine agent prompts in `agents/*/prompt.md`
-2. Add new capabilities in agent scripts
-3. Enhance orchestration logic
-4. Improve data formats and validation
-
----
-
-**Generated by Claude Code** 🤖
