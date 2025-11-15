@@ -16,8 +16,9 @@ export default defineConfig({
   markdown: {
     shikiConfig: {
       theme: 'github-dark',
-      wrap: true
-    }
+      wrap: true,
+    },
   },
   output: 'static',
+  outDir: './docs',
 });
