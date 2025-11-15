@@ -2,7 +2,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import fs from 'fs/promises';
 import path from 'path';
 
-import { publishArticle } from '../workflow/publish';
+import { publishArticle } from '../workflow/publish.js';
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,

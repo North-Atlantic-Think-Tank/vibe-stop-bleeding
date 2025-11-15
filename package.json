@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "editor:research": "node agents/editor/research.js",
     "editor:write": "node agents/editor/write.js",
+    "editor:summary": "node agents/editor/summary.js",
     "workflow:daily": "node agents/workflow/daily-cycle.js",
     "workflow:publish": "node agents/workflow/publish.js"
   },

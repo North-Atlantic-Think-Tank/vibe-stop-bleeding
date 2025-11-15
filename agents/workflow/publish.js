@@ -114,13 +114,14 @@ description: "${articleData.seo?.metaDescription || articleData.summary || ''}"
   return outputPath;
 }
 
-// CLI execution
-const articlePath = process.argv[2];
-if (!articlePath) {
-  console.error('Usage: npm run workflow:publish -- path/to/article.json');
-  process.exit(1);
-}
-
-publishArticle(articlePath).catch(console.error);
-
 export { publishArticle };
+
+// CLI execution - only run when this file is executed directly
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const articlePath = process.argv[2];
+  if (!articlePath) {
+    console.error('Usage: npm run workflow:publish -- path/to/article.json');
+    process.exit(1);
+  }
+  publishArticle(articlePath).catch(console.error);
+}

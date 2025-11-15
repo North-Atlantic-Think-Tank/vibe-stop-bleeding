@@ -32,7 +32,8 @@ vibe-stop-bleeding/
 │   ├── editor/
 │   │   ├── prompt.md           # Editor agent system prompt
 │   │   ├── research.js         # Research trending topics
-│   │   └── write.js            # Write full articles
+│   │   ├── write.js            # Write full articles
+│   │   └── summary.js          # Generate briefing summaries
 │   ├── developer/
 │   │   ├── prompt.md           # Developer agent system prompt
 │   │   └── setup.js            # Development tasks
@@ -99,6 +100,17 @@ npm run editor:research politics
 ```bash
 npm run editor:write -- "Canadian employment trends Q1 2025"
 ```
+
+#### Generate a briefing summary:
+```bash
+# From a topic
+npm run editor:summary -- "Canadian inflation trends 2024"
+
+# From a webpage URL
+npm run editor:summary -- "https://www.cbc.ca/news/politics/..."
+```
+
+This generates a concise briefing-style article (400-800 words) highlighting key facts, data, and conclusions from either a topic or webpage URL.
 
 ### Workflow Tasks
 
@@ -217,6 +229,16 @@ npm run editor:research
 npm run editor:write -- "Impact of new federal budget on Canadian families"
 ```
 
+### Generate quick briefing from news article:
+```bash
+npm run editor:summary -- "https://www.cbc.ca/news/business/inflation-report-latest"
+```
+
+### Generate briefing on trending topic:
+```bash
+npm run editor:summary -- "Bank of Canada interest rate decision December 2024"
+```
+
 ### Full end-to-end:
 ```bash
 npm run workflow:daily
@@ -254,8 +276,9 @@ npm run workflow:publish -- content/articles/2025-11-14-budget-analysis.json
 2. Set up API key in `.env`
 3. Run first research: `npm run editor:research`
 4. Write first article: `npm run editor:write -- "Your topic"`
-5. Review output in `content/` directory
-6. Build website (see Developer Agent for implementation)
+5. Or generate a quick briefing: `npm run editor:summary -- "Your topic or URL"`
+6. Review output in `content/` directory
+7. Build website (see Developer Agent for implementation)
 
 ## 📄 License
 
