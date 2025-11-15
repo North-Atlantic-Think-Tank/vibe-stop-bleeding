@@ -1,0 +1,30 @@
+[
+  {
+    "type": "bar",
+    "title": "Per-Student Education Funding by Province (2025)",
+    "data": [
+      {
+        "name": "BC",
+        "value": 14500
+      },
+      {
+        "name": "AB",
+        "value": 13800
+      },
+      {
+        "name": "ON",
+        "value": 14200
+      },
+      {
+        "name": "QC",
+        "value": 13500
+      },
+      {
+        "name": "NS",
+        "value": 12900
+      }
+    ],
+    "xKey": "name",
+    "yKey": "value"
+  }
+]

@@ -2,6 +2,8 @@ import Anthropic from '@anthropic-ai/sdk';
 import fs from 'fs/promises';
 import path from 'path';
 
+import { publishArticle } from '../workflow/publish';
+
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
@@ -13,7 +15,7 @@ const anthropic = new Anthropic({
 async function writeArticle(topic, category = 'general') {
   const editorPrompt = await fs.readFile(
     path.join(process.cwd(), 'agents/editor/prompt.md'),
-    'utf-8'
+    'utf-8',
   );
 
   const writeRequest = `Research and write a comprehensive article about: "${topic}"
@@ -53,7 +55,9 @@ Follow all guidelines in your prompt. Output the article in JSON format matching
   // Extract JSON from response (handle markdown code blocks)
   let articleData;
   try {
-    const jsonMatch = response.match(/```json\n([\s\S]*?)\n```/) || response.match(/(\{[\s\S]*\})/);
+    const jsonMatch =
+      response.match(/```json\n([\s\S]*?)\n```/) ||
+      response.match(/(\{[\s\S]*\})/);
     if (jsonMatch) {
       articleData = JSON.parse(jsonMatch[1]);
     } else {
@@ -66,17 +70,26 @@ Follow all guidelines in your prompt. Output the article in JSON format matching
 
   // Save article
   const timestamp = new Date().toISOString().split('T')[0];
-  const slug = topic.toLowerCase().replace(/[^a-z0-9]+/g, '-').substring(0, 50);
+  const slug = topic
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .substring(0, 50);
   const outputPath = path.join(
     process.cwd(),
     'content/articles',
-    `${timestamp}-${slug}.json`
+    `${timestamp}-${slug}.json`,
   );
 
   await fs.writeFile(outputPath, JSON.stringify(articleData, null, 2));
 
   console.log('✅ Article completed!');
   console.log(`📄 Saved to: ${outputPath}\n`);
+
+  // also do publish - @2025/11/15
+  const mdFilePath = await publishArticle(outputPath);
+
+  console.log('✅ Article published!');
+  console.log(`📄 Saved to: ${mdFilePath}\n`);
 
   return articleData;
 }

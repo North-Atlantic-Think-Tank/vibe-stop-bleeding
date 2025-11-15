@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import { generateChartImages } from '../shared/chart-generator.js';
 
 /**
  * Publishing Workflow
@@ -17,19 +18,79 @@ title: "${articleData.title || 'Untitled'}"
 date: ${articleData.date || new Date().toISOString().split('T')[0]}
 category: ${articleData.category || 'general'}
 author: ${articleData.author || 'stopbleeding.ca Editorial Team'}
-tags: [${(articleData.tags || []).map(t => `"${t}"`).join(', ')}]
+tags: [${(articleData.tags || []).map((t) => `"${t}"`).join(', ')}]
 description: "${articleData.seo?.metaDescription || articleData.summary || ''}"
 ---
 
 `;
 
+  // Generate article slug for file naming
+  const articleSlug = (articleData.title || 'article')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .substring(0, 60);
+
+  // Generate chart images if charts exist
+  let chartImagePaths = [];
+  if (articleData.charts && articleData.charts.length > 0) {
+    console.log(
+      `📊 Generating ${articleData.charts.length} chart image(s)...\n`,
+    );
+
+    const baseImagePath = path.join(
+      process.cwd(),
+      'public/images/charts',
+      `${articleData.date}-${articleSlug}`,
+    );
+
+    try {
+      chartImagePaths = await generateChartImages(
+        articleData.charts,
+        baseImagePath,
+      );
+    } catch (error) {
+      console.error(`Error generating chart images: ${error.message}`);
+    }
+
+    // Also save chart data as JSON for reference
+    const chartDataPath = path.join(
+      process.cwd(),
+      'public/data',
+      `${articleData.date}-${articleSlug}-charts.json`,
+    );
+    await fs.mkdir(path.dirname(chartDataPath), { recursive: true });
+    await fs.writeFile(
+      chartDataPath,
+      JSON.stringify(articleData.charts, null, 2),
+    );
+    console.log(`📊 Chart data saved to: ${chartDataPath}`);
+  }
+
   // Build full markdown content
   let markdown = frontmatter;
   markdown += `# ${articleData.title}\n\n`;
-  markdown += `*${articleData.summary}*\n\n`;
+  if (articleData.summary) {
+    markdown += `*${articleData.summary}*\n\n`;
+  }
   markdown += `---\n\n`;
   markdown += articleData.content || '';
-  markdown += `\n\n---\n\n`;
+
+  // Insert chart images into markdown
+  if (chartImagePaths.length > 0) {
+    markdown += `\n\n---\n\n## Data Visualizations\n\n`;
+    chartImagePaths.forEach((imagePath, idx) => {
+      const relativePath = imagePath.replace(
+        path.join(process.cwd(), 'public'),
+        '',
+      );
+      const chart = articleData.charts[idx];
+      markdown += `### ${chart.title}\n\n`;
+      markdown += `![${chart.title}](${relativePath})\n\n`;
+    });
+  }
+
+  // Add sources section
+  markdown += `\n---\n\n`;
   markdown += `## Sources\n\n`;
 
   if (articleData.sources && articleData.sources.length > 0) {
@@ -39,32 +100,14 @@ description: "${articleData.seo?.metaDescription || articleData.summary || ''}"
   }
 
   // Save as markdown
-  const articleSlug = (articleData.title || 'article')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .substring(0, 60);
-
   const outputPath = path.join(
     process.cwd(),
-    'content/articles',
-    `${articleData.date}-${articleSlug}.md`
+    'content/pages',
+    `${articleData.date}-${articleSlug}.md`,
   );
 
+  await fs.mkdir(path.dirname(outputPath), { recursive: true });
   await fs.writeFile(outputPath, markdown);
-
-  // Save chart data separately if exists
-  if (articleData.charts && articleData.charts.length > 0) {
-    const chartDataPath = path.join(
-      process.cwd(),
-      'public/data',
-      `${articleData.date}-${articleSlug}-charts.json`
-    );
-    await fs.writeFile(
-      chartDataPath,
-      JSON.stringify(articleData.charts, null, 2)
-    );
-    console.log(`📊 Chart data saved to: ${chartDataPath}`);
-  }
 
   console.log(`✅ Article published to: ${outputPath}`);
 

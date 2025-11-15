@@ -1,5 +1,7 @@
 import fs from 'fs/promises';
+import path from 'path';
 import { validateArticle } from './types.js';
+import { generateChartImages } from './chart-generator.js';
 
 /**
  * Data Converter Utilities
@@ -9,7 +11,7 @@ import { validateArticle } from './types.js';
 /**
  * Converts article JSON to markdown
  */
-export async function jsonToMarkdown(jsonPath, outputPath = null) {
+export async function jsonToMarkdown(jsonPath, outputPath = null, generateCharts = false) {
   const data = JSON.parse(await fs.readFile(jsonPath, 'utf-8'));
   validateArticle(data);
 
@@ -24,11 +26,43 @@ description: "${data.seo?.metaDescription || data.summary}"
 
 `;
 
+  // Generate chart images if requested
+  let chartImagePaths = [];
+  if (generateCharts && data.charts && data.charts.length > 0 && outputPath) {
+    const articleSlug = (data.title || 'article')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .substring(0, 60);
+
+    const baseImagePath = path.join(
+      path.dirname(outputPath),
+      '../public/images/charts',
+      `${data.date}-${articleSlug}`
+    );
+
+    try {
+      chartImagePaths = await generateChartImages(data.charts, baseImagePath);
+    } catch (error) {
+      console.error(`Error generating chart images: ${error.message}`);
+    }
+  }
+
   let markdown = frontmatter;
   markdown += `# ${data.title}\n\n`;
   markdown += `*${data.summary}*\n\n`;
   markdown += `---\n\n`;
   markdown += data.content || '';
+
+  // Insert chart images into markdown
+  if (chartImagePaths.length > 0) {
+    markdown += `\n\n---\n\n## Data Visualizations\n\n`;
+    chartImagePaths.forEach((imagePath, idx) => {
+      const relativePath = imagePath.replace(path.join(process.cwd(), 'public'), '');
+      const chart = data.charts[idx];
+      markdown += `### ${chart.title}\n\n`;
+      markdown += `![${chart.title}](${relativePath})\n\n`;
+    });
+  }
 
   if (data.sources && data.sources.length > 0) {
     markdown += `\n\n---\n\n## Sources\n\n`;
@@ -38,6 +72,7 @@ description: "${data.seo?.metaDescription || data.summary}"
   }
 
   if (outputPath) {
+    await fs.mkdir(path.dirname(outputPath), { recursive: true });
     await fs.writeFile(outputPath, markdown);
   }
 
