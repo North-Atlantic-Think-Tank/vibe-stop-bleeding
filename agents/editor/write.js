@@ -82,6 +82,24 @@ Follow all guidelines in your prompt. Output the article in JSON format matching
 
   await fs.writeFile(outputPath, JSON.stringify(articleData, null, 2));
 
+  // Validate and fix date property to ensure it's today
+  const today = new Date().toISOString().split('T')[0];
+  if (articleData.date && articleData.date !== today) {
+    console.log(
+      `⚠️  Date mismatch: Article date is "${articleData.date}", updating to today "${today}"`,
+    );
+    articleData.date = today;
+    await fs.writeFile(outputPath, JSON.stringify(articleData, null, 2));
+    console.log('✅ Date corrected to today!');
+  } else if (!articleData.date) {
+    console.log(`⚠️  No date found in article, setting to today "${today}"`);
+    articleData.date = today;
+    await fs.writeFile(outputPath, JSON.stringify(articleData, null, 2));
+    console.log('✅ Date added!');
+  } else {
+    console.log(`✅ Date verified: ${articleData.date}`);
+  }
+
   console.log('✅ Article completed!');
   console.log(`📄 Saved to: ${outputPath}\n`);
 

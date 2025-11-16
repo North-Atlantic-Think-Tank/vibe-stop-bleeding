@@ -1,0 +1,80 @@
+[
+  {
+    "type": "line",
+    "title": "Federal Deficit Projection 2024-2029",
+    "data": {
+      "labels": [
+        "2024-25",
+        "2025-26",
+        "2026-27",
+        "2027-28",
+        "2028-29"
+      ],
+      "datasets": [
+        {
+          "label": "Deficit ($ billions)",
+          "data": [
+            46.8,
+            38.4,
+            30.7,
+            23.1,
+            13.4
+          ]
+        }
+      ]
+    },
+    "source": "Parliamentary Budget Officer, 2024"
+  },
+  {
+    "type": "bar",
+    "title": "Major Unfunded Commitments ($ billions over 5 years)",
+    "data": {
+      "labels": [
+        "NATO Defence Spending",
+        "Pharmacare Program",
+        "Indigenous Programs",
+        "Debt Servicing Growth"
+      ],
+      "datasets": [
+        {
+          "label": "Estimated Cost",
+          "data": [
+            81.9,
+            60,
+            35,
+            25
+          ]
+        }
+      ]
+    },
+    "source": "Parliamentary Budget Officer analysis, 2024"
+  },
+  {
+    "type": "line",
+    "title": "Debt-to-GDP Ratio Projection",
+    "data": {
+      "labels": [
+        "2023-24",
+        "2024-25",
+        "2025-26",
+        "2026-27",
+        "2027-28",
+        "2028-29"
+      ],
+      "datasets": [
+        {
+          "label": "Federal Debt-to-GDP (%)",
+          "data": [
+            41.9,
+            42.1,
+            42.4,
+            42.7,
+            42.9,
+            43.1
+          ]
+        }
+      ]
+    },
+    "source": "Parliamentary Budget Officer, 2024"
+  }
+]

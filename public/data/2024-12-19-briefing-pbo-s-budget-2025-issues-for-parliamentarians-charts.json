@@ -1,0 +1,49 @@
+[
+  {
+    "title": "Major Fiscal Pressures on Budget 2025",
+    "type": "bar",
+    "data": {
+      "labels": [
+        "Defense Spending Gap",
+        "Debt Servicing Increase",
+        "Healthcare Transfers",
+        "Climate Investments"
+      ],
+      "datasets": [
+        {
+          "label": "Estimated Annual Impact ($B CAD)",
+          "data": [
+            19,
+            15,
+            12,
+            8
+          ]
+        }
+      ]
+    },
+    "description": "Estimated annual fiscal impact of major budget pressures (approximate values based on PBO analysis)"
+  },
+  {
+    "title": "Path to Deficit Reduction Target",
+    "type": "line",
+    "data": {
+      "labels": [
+        "2024-25",
+        "2025-26",
+        "2026-27"
+      ],
+      "datasets": [
+        {
+          "label": "Target Deficit (% of GDP)",
+          "data": [
+            1.4,
+            1.2,
+            1
+          ],
+          "borderColor": "green"
+        }
+      ]
+    },
+    "description": "Government's deficit reduction trajectory to meet 1% GDP target by 2026-27"
+  }
+]

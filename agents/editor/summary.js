@@ -77,9 +77,11 @@ async function generateSummary(input, category = 'general') {
   if (isPDF && pdfContent) {
     // Limit text length to avoid token limits (roughly 100k characters)
     const maxChars = 100000;
-    const truncatedText = pdfContent.text.length > maxChars
-      ? pdfContent.text.substring(0, maxChars) + '\n\n[... PDF content truncated due to length ...]'
-      : pdfContent.text;
+    const truncatedText =
+      pdfContent.text.length > maxChars
+        ? pdfContent.text.substring(0, maxChars) +
+          '\n\n[... PDF content truncated due to length ...]'
+        : pdfContent.text;
 
     summaryRequest = `Analyze and summarize this PDF document content:
 
@@ -134,7 +136,9 @@ Output the briefing in JSON format matching the data handoff schema:
   "seo": {...}
 }`;
 
-  console.log(`📋 Editor Agent: Generating briefing summary from ${inputType}...\n`);
+  console.log(
+    `📋 Editor Agent: Generating briefing summary from ${inputType}...\n`,
+  );
   if (isURL) {
     console.log(`🔗 URL: ${input}\n`);
   } else if (isPDF) {
@@ -180,7 +184,11 @@ Output the briefing in JSON format matching the data handoff schema:
     slug = new URL(input).hostname.replace(/\./g, '-') + '-summary';
   } else if (isPDF) {
     // Use PDF filename (without extension) as slug
-    slug = path.basename(pdfPath, '.pdf').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-summary';
+    slug =
+      path
+        .basename(pdfPath, '.pdf')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-') + '-summary';
   } else {
     slug = input.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   }
@@ -197,6 +205,24 @@ Output the briefing in JSON format matching the data handoff schema:
   console.log('✅ Briefing summary completed!');
   console.log(`📄 Saved to: ${outputPath}\n`);
 
+  // Validate and fix date property to ensure it's today
+  const today = new Date().toISOString().split('T')[0];
+  if (summaryData.date && summaryData.date !== today) {
+    console.log(
+      `⚠️  Date mismatch: Article date is "${summaryData.date}", updating to today "${today}"`,
+    );
+    summaryData.date = today;
+    await fs.writeFile(outputPath, JSON.stringify(summaryData, null, 2));
+    console.log('✅ Date corrected to today!');
+  } else if (!summaryData.date) {
+    console.log(`⚠️  No date found in article, setting to today "${today}"`);
+    summaryData.date = today;
+    await fs.writeFile(outputPath, JSON.stringify(summaryData, null, 2));
+    console.log('✅ Date added!');
+  } else {
+    console.log(`✅ Date verified: ${summaryData.date}`);
+  }
+
   // Publish to markdown
   try {
     const mdFilePath = await publishArticle(outputPath);
@@ -204,7 +230,10 @@ Output the briefing in JSON format matching the data handoff schema:
     console.log(`📄 Published to: ${mdFilePath}\n`);
   } catch (publishError) {
     console.warn('⚠️  Could not auto-publish:', publishError.message);
-    console.log('💡 You can manually publish later with: npm run workflow:publish -- ' + outputPath);
+    console.log(
+      '💡 You can manually publish later with: npm run workflow:publish -- ' +
+        outputPath,
+    );
   }
 
   return summaryData;
@@ -217,8 +246,12 @@ if (!input) {
   console.error('');
   console.error('Examples:');
   console.error('  npm run editor:summary -- "Canadian inflation trends 2024"');
-  console.error('  npm run editor:summary -- "https://www.cbc.ca/news/politics/..."');
-  console.error('  npm run editor:summary -- "budget-2025.pdf"  (from content/pdfs/)');
+  console.error(
+    '  npm run editor:summary -- "https://www.cbc.ca/news/politics/..."',
+  );
+  console.error(
+    '  npm run editor:summary -- "budget-2025.pdf"  (from content/pdfs/)',
+  );
   console.error('  npm run editor:summary -- "content/pdfs/report.pdf"');
   process.exit(1);
 }
