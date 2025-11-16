@@ -39,7 +39,7 @@ const formattedDate = new Date(date).toLocaleDateString('en-CA', {
       <!-- Title -->
       <h2 class="text-2xl md:text-3xl font-bold mt-3 mb-2 leading-tight">
         <a
-          href={`./articles/${slug}`}
+          href={`/articles/${slug}`}
           class="text-gray-900 hover:text-canadian-red transition-colors no-underline"
         >
           {title}
@@ -64,7 +64,7 @@ const formattedDate = new Date(date).toLocaleDateString('en-CA', {
 
       <!-- Read More Link -->
       <a
-        href={`./articles/${slug}`}
+        href={`/articles/${slug}`}
         class="inline-flex items-center text-canadian-red font-sans font-semibold text-sm uppercase tracking-wide hover:underline"
       >
         Read Full Analysis
