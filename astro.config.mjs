@@ -19,7 +19,7 @@ export default defineConfig({
       wrap: true,
     },
   },
-  base: '/vibe-stop-bleeding/',
+  base: './',
   output: 'static',
   outDir: './docs',
 });
