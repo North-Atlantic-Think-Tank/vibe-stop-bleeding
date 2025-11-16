@@ -110,6 +110,19 @@ npm run editor:summary -- "Canadian inflation trends 2024"
 npm run editor:summary -- "https://www.cbc.ca/news/politics/..."
 ```
 
+#### Investigation Usage Examples:
+```bash
+# Assess a potential investigation
+npm run journalist:assess -- "Ontario education spending up 20% but class sizes increased"
+
+# Conduct a full investigation
+npm run journalist:investigate -- "Housing affordability crisis" "Focus on Toronto and Vancouver"
+
+# Investigate viral claims
+npm run journalist:investigate -- "Major retailer replacing permanent staff with TFWs"
+```
+
+
 This generates a concise briefing-style article (400-800 words) highlighting key facts, data, and conclusions from either a topic or webpage URL.
 
 ### Workflow Tasks
