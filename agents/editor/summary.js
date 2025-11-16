@@ -2,6 +2,7 @@ import 'dotenv/config';
 import Anthropic from '@anthropic-ai/sdk';
 import fs from 'fs/promises';
 import path from 'path';
+import { createRequire } from 'module';
 
 import { publishArticle } from '../workflow/publish.js';
 
@@ -10,8 +11,26 @@ const anthropic = new Anthropic({
 });
 
 /**
+ * Extract text content from a PDF file
+ * Uses createRequire to work around pdf-parse ESM import issues
+ */
+async function extractPDFText(pdfPath) {
+  // Use createRequire to import pdf-parse (CommonJS module)
+  const require = createRequire(import.meta.url);
+  const pdf = require('pdf-parse');
+
+  const dataBuffer = await fs.readFile(pdfPath);
+  const data = await pdf(dataBuffer);
+  return {
+    text: data.text,
+    numPages: data.numpages,
+    info: data.info,
+  };
+}
+
+/**
  * Editor Agent - Summary Task
- * Generates a briefing-style summary article from a topic or webpage URL
+ * Generates a briefing-style summary article from a topic, webpage URL, or local PDF
  * highlighting outstanding facts and data as conclusion
  */
 async function generateSummary(input, category = 'general') {
@@ -20,13 +39,71 @@ async function generateSummary(input, category = 'general') {
     'utf-8',
   );
 
-  // Determine if input is a URL or topic
+  // Determine input type: URL, PDF, or topic
   const isURL = input.startsWith('http://') || input.startsWith('https://');
-  const inputType = isURL ? 'webpage URL' : 'topic';
+  const isPDF = input.endsWith('.pdf') || input.includes('content/pdfs/');
 
-  const summaryRequest = `${isURL ? `Read and analyze the content from this webpage: ${input}` : `Research and analyze this topic: "${input}"`}
+  let inputType = 'topic';
+  let pdfContent = null;
+  let pdfPath = null;
 
-Category: ${category}
+  if (isURL) {
+    inputType = 'webpage URL';
+  } else if (isPDF) {
+    inputType = 'PDF document';
+    // Resolve PDF path - check if it's a full path or just filename
+    if (path.isAbsolute(input)) {
+      pdfPath = input;
+    } else if (input.includes('content/pdfs/')) {
+      pdfPath = path.join(process.cwd(), input);
+    } else {
+      // Assume it's just a filename, look in content/pdfs
+      pdfPath = path.join(process.cwd(), 'content/pdfs', input);
+    }
+
+    // Extract PDF content
+    console.log(`📄 Reading PDF: ${pdfPath}\n`);
+    try {
+      pdfContent = await extractPDFText(pdfPath);
+      console.log(`✅ Extracted ${pdfContent.numPages} pages from PDF\n`);
+    } catch (error) {
+      console.error(`❌ Failed to read PDF: ${error.message}`);
+      throw error;
+    }
+  }
+
+  let summaryRequest;
+
+  if (isPDF && pdfContent) {
+    // Limit text length to avoid token limits (roughly 100k characters)
+    const maxChars = 100000;
+    const truncatedText = pdfContent.text.length > maxChars
+      ? pdfContent.text.substring(0, maxChars) + '\n\n[... PDF content truncated due to length ...]'
+      : pdfContent.text;
+
+    summaryRequest = `Analyze and summarize this PDF document content:
+
+**PDF Information:**
+- Pages: ${pdfContent.numPages}
+- Title: ${pdfContent.info?.Title || path.basename(pdfPath)}
+
+**PDF Content:**
+${truncatedText}
+
+---
+
+Category: ${category}`;
+  } else if (isURL) {
+    summaryRequest = `Read and analyze the content from this webpage: ${input}
+
+Category: ${category}`;
+  } else {
+    summaryRequest = `Research and analyze this topic: "${input}"
+
+Category: ${category}`;
+  }
+
+  summaryRequest += `
 
 **Task**: Create a BRIEFING-STYLE summary article that:
 1. Highlights the most outstanding and important facts
@@ -60,6 +137,8 @@ Output the briefing in JSON format matching the data handoff schema:
   console.log(`📋 Editor Agent: Generating briefing summary from ${inputType}...\n`);
   if (isURL) {
     console.log(`🔗 URL: ${input}\n`);
+  } else if (isPDF) {
+    console.log(`📄 PDF: ${pdfPath}\n`);
   } else {
     console.log(`📝 Topic: "${input}"\n`);
   }
@@ -96,10 +175,16 @@ Output the briefing in JSON format matching the data handoff schema:
 
   // Save summary
   const timestamp = new Date().toISOString().split('T')[0];
-  const slug = (isURL
-    ? new URL(input).hostname.replace(/\./g, '-') + '-summary'
-    : input.toLowerCase().replace(/[^a-z0-9]+/g, '-')
-  ).substring(0, 50);
+  let slug;
+  if (isURL) {
+    slug = new URL(input).hostname.replace(/\./g, '-') + '-summary';
+  } else if (isPDF) {
+    // Use PDF filename (without extension) as slug
+    slug = path.basename(pdfPath, '.pdf').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-summary';
+  } else {
+    slug = input.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  }
+  slug = slug.substring(0, 50);
 
   const outputPath = path.join(
     process.cwd(),
@@ -128,11 +213,13 @@ Output the briefing in JSON format matching the data handoff schema:
 // CLI execution
 const input = process.argv.slice(2).join(' ');
 if (!input) {
-  console.error('Usage: npm run editor:summary -- "Topic or URL"');
+  console.error('Usage: npm run editor:summary -- "Topic, URL, or PDF"');
   console.error('');
   console.error('Examples:');
   console.error('  npm run editor:summary -- "Canadian inflation trends 2024"');
   console.error('  npm run editor:summary -- "https://www.cbc.ca/news/politics/..."');
+  console.error('  npm run editor:summary -- "budget-2025.pdf"  (from content/pdfs/)');
+  console.error('  npm run editor:summary -- "content/pdfs/report.pdf"');
   process.exit(1);
 }
 

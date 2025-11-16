@@ -5,6 +5,7 @@ import Footer from '../../components/Footer.astro';
 import Chart from '../../components/charts/Chart';
 import { readdir, readFile } from 'fs/promises';
 import { join } from 'path';
+import { marked } from 'marked';
 
 export async function getStaticPaths() {
   try {
@@ -60,6 +61,17 @@ const categoryColors: Record<string, string> = {
 
 const bgColor =
   categoryColors[article.category.toLowerCase()] || categoryColors.general;
+
+// Configure marked for safe rendering
+marked.setOptions({
+  breaks: true,
+  gfm: true,
+});
+
+// Render markdown content to HTML
+const renderedContent = article.content
+  ? await marked.parse(article.content)
+  : '';
 ---
 
 <BaseLayout
@@ -102,13 +114,10 @@ const bgColor =
       </header>
 
       <!-- Article Content -->
-      <div class="prose-newspaper">
-        {
-          article.content
-            .split('\n\n')
-            .map((paragraph: string) => <p class="mb-4">{paragraph}</p>)
-        }
-      </div>
+      <div
+        class="prose prose-lg max-w-none prose-newspaper"
+        set:html={renderedContent}
+      />
 
       <!-- Charts Section -->
       {

@@ -1,0 +1,118 @@
+[
+  {
+    "id": "deficit-composition",
+    "type": "stacked-bar",
+    "title": "Budget 2025 Deficit Composition (2025-2030)",
+    "description": "Shift from operational spending to capital investment over five-year horizon",
+    "data": {
+      "labels": [
+        "2025-26",
+        "2026-27",
+        "2027-28",
+        "2028-29",
+        "2029-30"
+      ],
+      "datasets": [
+        {
+          "label": "Capital Investment",
+          "data": [
+            78,
+            65,
+            64,
+            58,
+            57
+          ],
+          "note": "Billions CAD"
+        },
+        {
+          "label": "Day-to-day Operating Deficit",
+          "data": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "note": "Balanced by 2028-29"
+        }
+      ]
+    }
+  },
+  {
+    "id": "g7-debt-comparison",
+    "type": "bar",
+    "title": "G7 Net Debt-to-GDP Ratio (2025)",
+    "description": "Canada maintains strongest fiscal position among G7 nations",
+    "data": {
+      "labels": [
+        "Canada",
+        "Germany",
+        "United Kingdom",
+        "United States",
+        "France",
+        "Italy",
+        "Japan"
+      ],
+      "datasets": [
+        {
+          "label": "Net Debt/GDP (%)",
+          "data": [
+            13.3,
+            48.7,
+            94.6,
+            99.6,
+            108.2,
+            126.9,
+            130.1
+          ]
+        }
+      ]
+    },
+    "source": "International Monetary Fund, October 2025 Fiscal Monitor"
+  },
+  {
+    "id": "investment-breakdown",
+    "type": "pie",
+    "title": "5-Year Capital Investment Distribution ($280B Total)",
+    "description": "Allocation of generational investments across priority areas",
+    "data": {
+      "labels": [
+        "Infrastructure ($115B)",
+        "Productivity & Competitiveness ($110B)",
+        "Defence & Security ($30B)",
+        "Housing ($25B)"
+      ],
+      "datasets": [
+        {
+          "data": [
+            115,
+            110,
+            30,
+            25
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "spending-growth-comparison",
+    "type": "bar",
+    "title": "Direct Program Spending Growth Rates",
+    "description": "Dramatic reduction in operational spending growth",
+    "data": {
+      "labels": [
+        "2014-15 to 2024-25",
+        "2025-26 to 2029-30"
+      ],
+      "datasets": [
+        {
+          "label": "Compound Annual Growth Rate (%)",
+          "data": [
+            8.1,
+            0.5
+          ]
+        }
+      ]
+    }
+  }
+]
