@@ -19,44 +19,44 @@ async function pushDocsContent() {
 
     console.log(`📌 Current branch: ${currentBranch}`);
 
-    // Check for JSON file changes in content/articles
-    let hasJsonChanges = false;
-    try {
-      const status = execSync('git status --porcelain content/articles/*.json', {
-        encoding: 'utf-8',
-      }).trim();
-      hasJsonChanges = status.length > 0;
+    // // Check for JSON file changes in content/articles
+    // let hasJsonChanges = false;
+    // try {
+    //   const status = execSync('git status --porcelain content/articles/*.json', {
+    //     encoding: 'utf-8',
+    //   }).trim();
+    //   hasJsonChanges = status.length > 0;
 
-      if (hasJsonChanges) {
-        console.log('📝 Found JSON file changes:');
-        console.log(status);
-      }
-    } catch (e) {
-      // No JSON files or no changes - check if any JSON exists
-      const allStatus = execSync('git status --porcelain content/articles/', {
-        encoding: 'utf-8',
-      }).trim();
+    //   if (hasJsonChanges) {
+    //     console.log('📝 Found JSON file changes:');
+    //     console.log(status);
+    //   }
+    // } catch (e) {
+    //   // No JSON files or no changes - check if any JSON exists
+    //   const allStatus = execSync('git status --porcelain content/articles/', {
+    //     encoding: 'utf-8',
+    //   }).trim();
 
-      const jsonChanges = allStatus
-        .split('\n')
-        .filter((line) => line.includes('.json'));
-      hasJsonChanges = jsonChanges.length > 0;
+    //   const jsonChanges = allStatus
+    //     .split('\n')
+    //     .filter((line) => line.includes('.json'));
+    //   hasJsonChanges = jsonChanges.length > 0;
 
-      if (hasJsonChanges) {
-        console.log('📝 Found JSON file changes:');
-        jsonChanges.forEach((line) => console.log(line));
-      }
-    }
+    //   if (hasJsonChanges) {
+    //     console.log('📝 Found JSON file changes:');
+    //     jsonChanges.forEach((line) => console.log(line));
+    //   }
+    // }
 
-    if (!hasJsonChanges) {
-      console.log('ℹ️  No JSON file changes detected in content/articles/');
-      console.log('✅ Nothing to push to docs branch.');
-      return;
-    }
+    // if (!hasJsonChanges) {
+    //   console.log('ℹ️  No JSON file changes detected in content/articles/');
+    //   console.log('✅ Nothing to push to docs branch.');
+    //   return;
+    // }
 
-    // Stage JSON changes
-    console.log('\n📦 Staging JSON file changes...');
-    execSync('git add content/articles/*.json', { stdio: 'inherit' });
+    // // Stage JSON changes
+    // console.log('\n📦 Staging JSON file changes...');
+    // execSync('git add content/articles/*.json', { stdio: 'inherit' });
 
     // Commit changes on current branch first (if any)
     try {
@@ -67,10 +67,9 @@ async function pushDocsContent() {
       if (stagedChanges) {
         console.log('💾 Committing changes on current branch...');
         const timestamp = new Date().toISOString().split('T')[0];
-        execSync(
-          `git commit -m "Update article JSON files - ${timestamp}"`,
-          { stdio: 'inherit' }
-        );
+        execSync(`git commit -m "Update article JSON files - ${timestamp}"`, {
+          stdio: 'inherit',
+        });
       }
     } catch (e) {
       console.log('ℹ️  No staged changes to commit.');
@@ -111,7 +110,6 @@ async function pushDocsContent() {
     console.log(`📤 Docs branch pushed to remote successfully`);
     console.log(`📍 Now on branch: ${currentBranch}`);
     console.log('='.repeat(50) + '\n');
-
   } catch (error) {
     console.error('\n❌ Error during push operation:', error.message);
 
