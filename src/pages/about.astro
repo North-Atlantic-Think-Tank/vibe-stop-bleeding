@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+
+import { base } from '../config';
 ---
 
 <BaseLayout
@@ -88,7 +90,7 @@ import Footer from '../components/Footer.astro';
         <h2 class="text-3xl font-bold mt-8 mb-4">Stay Connected</h2>
         <p>
           Subscribe to our <a
-            href="./rss.xml"
+            href={`${base}/rss.xml`}
             class="text-canadian-red hover:underline">RSS feed</a
           > to stay updated with the latest Canadian news analysis. We publish new
           articles regularly, covering the stories that shape our nation.
@@ -99,7 +101,7 @@ import Footer from '../components/Footer.astro';
             <strong>Contact:</strong> For questions, feedback, or inquiries, email
             us at
             <a
-              href="mailto:natt.rl.contact@gmail.com"
+              href="mailto:natt.rl.contact[AT]gmail.com"
               class="text-canadian-red hover:underline"
               >natt.rl.contact[AT]gmail.com</a
             >
