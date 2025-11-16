@@ -19,44 +19,47 @@ async function pushDocsContent() {
 
     console.log(`📌 Current branch: ${currentBranch}`);
 
-    // // Check for JSON file changes in content/articles
-    // let hasJsonChanges = false;
-    // try {
-    //   const status = execSync('git status --porcelain content/articles/*.json', {
-    //     encoding: 'utf-8',
-    //   }).trim();
-    //   hasJsonChanges = status.length > 0;
+    // Check for JSON file changes in content/articles
+    let hasJsonChanges = false;
+    try {
+      const status = execSync(
+        'git status --porcelain content/articles/*.json',
+        {
+          encoding: 'utf-8',
+        },
+      ).trim();
+      hasJsonChanges = status.length > 0;
 
-    //   if (hasJsonChanges) {
-    //     console.log('📝 Found JSON file changes:');
-    //     console.log(status);
-    //   }
-    // } catch (e) {
-    //   // No JSON files or no changes - check if any JSON exists
-    //   const allStatus = execSync('git status --porcelain content/articles/', {
-    //     encoding: 'utf-8',
-    //   }).trim();
+      if (hasJsonChanges) {
+        console.log('📝 Found JSON file changes:');
+        console.log(status);
+      }
+    } catch (e) {
+      // No JSON files or no changes - check if any JSON exists
+      const allStatus = execSync('git status --porcelain content/articles/', {
+        encoding: 'utf-8',
+      }).trim();
 
-    //   const jsonChanges = allStatus
-    //     .split('\n')
-    //     .filter((line) => line.includes('.json'));
-    //   hasJsonChanges = jsonChanges.length > 0;
+      const jsonChanges = allStatus
+        .split('\n')
+        .filter((line) => line.includes('.json'));
+      hasJsonChanges = jsonChanges.length > 0;
 
-    //   if (hasJsonChanges) {
-    //     console.log('📝 Found JSON file changes:');
-    //     jsonChanges.forEach((line) => console.log(line));
-    //   }
-    // }
+      if (hasJsonChanges) {
+        console.log('📝 Found JSON file changes:');
+        jsonChanges.forEach((line) => console.log(line));
+      }
+    }
 
-    // if (!hasJsonChanges) {
-    //   console.log('ℹ️  No JSON file changes detected in content/articles/');
-    //   console.log('✅ Nothing to push to docs branch.');
-    //   return;
-    // }
+    if (!hasJsonChanges) {
+      console.log('ℹ️  No JSON file changes detected in content/articles/');
+      console.log('✅ Nothing to push to docs branch.');
+      return;
+    }
 
-    // // Stage JSON changes
-    // console.log('\n📦 Staging JSON file changes...');
-    // execSync('git add content/articles/*.json', { stdio: 'inherit' });
+    // Stage JSON changes
+    console.log('\n📦 Staging JSON file changes...');
+    execSync('git add content/articles/*.json', { stdio: 'inherit' });
 
     // Commit changes on current branch first (if any)
     try {
@@ -84,12 +87,40 @@ async function pushDocsContent() {
       execSync('git checkout -b docs', { stdio: 'inherit' });
     }
 
-    // Merge changes from main/current branch
-    console.log('\n🔀 Merging changes from main branch...');
+    // Merge changes from main/current branch (excluding agents folder)
+    console.log('\n🔀 Merging changes from main branch (excluding agents folder)...');
     try {
-      execSync(`git merge ${currentBranch} --no-edit`, { stdio: 'inherit' });
+      // Use --no-commit to allow us to exclude agents folder
+      execSync(`git merge ${currentBranch} --no-commit --no-ff`, {
+        stdio: 'inherit',
+      });
+
+      // Check if agents folder was changed and revert it
+      try {
+        const agentsChanged = execSync('git diff --cached --name-only agents/', {
+          encoding: 'utf-8',
+        }).trim();
+
+        if (agentsChanged) {
+          console.log('🚫 Excluding agents folder changes from merge...');
+          execSync('git reset HEAD agents/', { stdio: 'inherit' });
+          execSync('git checkout -- agents/', { stdio: 'inherit' });
+        }
+      } catch (e) {
+        // No agents folder changes, continue
+      }
+
+      // Complete the merge commit
+      console.log('💾 Completing merge commit...');
+      try {
+        execSync('git commit --no-edit', { stdio: 'inherit' });
+      } catch (e) {
+        // If nothing to commit after excluding agents, that's fine
+        console.log('ℹ️  No changes to commit after excluding agents folder.');
+      }
     } catch (e) {
       console.error('⚠️  Merge conflict detected. Please resolve manually.');
+      execSync('git merge --abort', { stdio: 'pipe' });
       execSync(`git checkout ${currentBranch}`, { stdio: 'inherit' });
       throw e;
     }
