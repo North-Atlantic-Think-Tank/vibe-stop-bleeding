@@ -108,6 +108,9 @@ npm run editor:summary -- "Canadian inflation trends 2024"
 
 # From a webpage URL
 npm run editor:summary -- "https://www.cbc.ca/news/politics/..."
+
+# Summarize a PDF by filename (from content/pdfs/)
+npm run editor:summary -- "budget-2025-our-plan.pdf"
 ```
 
 #### Investigation Usage Examples:

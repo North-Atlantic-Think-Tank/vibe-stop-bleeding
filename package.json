@@ -13,6 +13,7 @@
     "journalist:assess": "node agents/journalist/assess.js",
     "journalist:investigate": "node agents/journalist/investigate.js",
     "developer:push-docs": "node agents/developer/push-docs.js",
+    "publish": "npm run developer:push-docs",
     "workflow:daily": "node agents/workflow/daily-cycle.js",
     "workflow:publish": "node agents/workflow/publish.js"
   },
@@ -25,6 +26,8 @@
     "astro": "^4.0.0",
     "chartjs-node-canvas": "^5.0.0",
     "dotenv": "^17.2.3",
+    "marked": "^15.0.12",
+    "pdf-parse": "^1.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "recharts": "^2.10.0",
