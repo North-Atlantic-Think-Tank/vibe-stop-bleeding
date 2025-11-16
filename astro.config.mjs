@@ -19,7 +19,8 @@ export default defineConfig({
       wrap: true,
     },
   },
-  base: './',
+  site: 'https://north-atlantic-think-tank.github.io',
+  base: '/vibe-stop-bleeding',
   output: 'static',
   outDir: './docs',
 });

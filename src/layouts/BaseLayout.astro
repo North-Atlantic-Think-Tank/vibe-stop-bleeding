@@ -10,18 +10,18 @@ export interface Props {
 const {
   title = 'stopbleeding.ca - Canadian News Analysis',
   description = 'AI-powered analysis of Canadian politics, economy, employment, and education news',
-  image = '/images/og-image.jpg'
+  image = '/images/og-image.jpg',
 } = Astro.props;
 
 const siteUrl = 'https://stopbleeding.ca';
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
     <!-- Primary Meta Tags -->
@@ -44,7 +44,7 @@ const siteUrl = 'https://stopbleeding.ca';
     <meta property="twitter:image" content={new URL(image, siteUrl)} />
 
     <!-- Sitemap -->
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="sitemap" href="./sitemap-index.xml" />
   </head>
   <body class="antialiased">
     <slot />

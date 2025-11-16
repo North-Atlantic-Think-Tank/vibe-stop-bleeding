@@ -14,7 +14,7 @@ async function getArticles() {
 
     const articles = await Promise.all(
       files
-        .filter(file => file.endsWith('.json'))
+        .filter((file) => file.endsWith('.json'))
         .map(async (file) => {
           const filePath = join(articlesDir, file);
           const content = await readFile(filePath, 'utf-8');
@@ -29,13 +29,15 @@ async function getArticles() {
             ...article,
             slug: file.replace('.json', ''),
             excerpt,
-            readingTime: `${Math.ceil(article.content?.split(' ').length / 200)} min read`
+            readingTime: `${Math.ceil(article.content?.split(' ').length / 200)} min read`,
           };
-        })
+        }),
     );
 
     // Sort by date, newest first
-    return articles.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    return articles.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+    );
   } catch (error) {
     console.error('Error loading articles:', error);
     return [];
@@ -52,56 +54,61 @@ const recentArticles = allArticles.slice(1, 11); // Next 10 articles
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <!-- Featured Article Section -->
-    {featuredArticle && (
-      <section class="mb-16 pb-16 border-b-2 border-gray-300">
-        <div class="text-center mb-8">
-          <h2 class="text-sm font-sans font-bold uppercase tracking-wider text-gray-600 mb-4">
-            Featured Analysis
-          </h2>
-        </div>
-        <ArticleCard
-          title={featuredArticle.title}
-          date={featuredArticle.date}
-          category={featuredArticle.category}
-          excerpt={featuredArticle.excerpt}
-          slug={featuredArticle.slug}
-          readingTime={featuredArticle.readingTime}
-        />
-      </section>
-    )}
+    {
+      featuredArticle && (
+        <section class="mb-16 pb-16 border-b-2 border-gray-300">
+          <div class="text-center mb-8">
+            <h2 class="text-sm font-sans font-bold uppercase tracking-wider text-gray-600 mb-4">
+              Featured Analysis
+            </h2>
+          </div>
+          <ArticleCard
+            title={featuredArticle.title}
+            date={featuredArticle.date}
+            category={featuredArticle.category}
+            excerpt={featuredArticle.excerpt}
+            slug={featuredArticle.slug}
+            readingTime={featuredArticle.readingTime}
+          />
+        </section>
+      )
+    }
 
     <!-- Recent Articles Section -->
     <section>
       <div class="flex items-center justify-between mb-8">
         <h2 class="text-3xl font-bold font-sans">Latest Analysis</h2>
         <a
-          href="/archive"
+          href="./archive"
           class="text-canadian-red font-sans font-semibold text-sm uppercase tracking-wide hover:underline"
         >
           View All Articles
         </a>
       </div>
 
-      {recentArticles.length > 0 ? (
-        <div class="space-y-8">
-          {recentArticles.map((article) => (
-            <ArticleCard
-              title={article.title}
-              date={article.date}
-              category={article.category}
-              excerpt={article.excerpt}
-              slug={article.slug}
-              readingTime={article.readingTime}
-            />
-          ))}
-        </div>
-      ) : (
-        <div class="text-center py-16">
-          <p class="text-gray-600 text-lg">
-            No articles published yet. Check back soon for Canadian news analysis!
-          </p>
-        </div>
-      )}
+      {
+        recentArticles.length > 0 ? (
+          <div class="space-y-8">
+            {recentArticles.map((article) => (
+              <ArticleCard
+                title={article.title}
+                date={article.date}
+                category={article.category}
+                excerpt={article.excerpt}
+                slug={article.slug}
+                readingTime={article.readingTime}
+              />
+            ))}
+          </div>
+        ) : (
+          <div class="text-center py-16">
+            <p class="text-gray-600 text-lg">
+              No articles published yet. Check back soon for Canadian news
+              analysis!
+            </p>
+          </div>
+        )
+      }
     </section>
 
     <!-- Categories Quick Links -->
@@ -109,25 +116,25 @@ const recentArticles = allArticles.slice(1, 11); // Next 10 articles
       <h2 class="text-2xl font-bold font-sans mb-6">Browse by Category</h2>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <a
-          href="/category/politics"
+          href="./category/politics"
           class="bg-blue-600 text-white p-6 text-center font-sans font-bold uppercase tracking-wide hover:bg-blue-700 transition-colors"
         >
           Politics
         </a>
         <a
-          href="/category/economy"
+          href="./category/economy"
           class="bg-green-600 text-white p-6 text-center font-sans font-bold uppercase tracking-wide hover:bg-green-700 transition-colors"
         >
           Economy
         </a>
         <a
-          href="/category/employment"
+          href="./category/employment"
           class="bg-purple-600 text-white p-6 text-center font-sans font-bold uppercase tracking-wide hover:bg-purple-700 transition-colors"
         >
           Employment
         </a>
         <a
-          href="/category/education"
+          href="./category/education"
           class="bg-orange-600 text-white p-6 text-center font-sans font-bold uppercase tracking-wide hover:bg-orange-700 transition-colors"
         >
           Education
