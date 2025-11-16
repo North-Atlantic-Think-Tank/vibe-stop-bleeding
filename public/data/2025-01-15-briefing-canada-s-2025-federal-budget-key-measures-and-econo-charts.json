@@ -1,0 +1,35 @@
+[
+  {
+    "type": "bar",
+    "title": "Tax Relief Measures Impact",
+    "data": {
+      "labels": [
+        "GST/HST Holiday",
+        "Working Canadians Rebate",
+        "Total Relief"
+      ],
+      "datasets": [
+        {
+          "label": "Value (Billions CAD)",
+          "data": [
+            0.6,
+            1,
+            1.6
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "type": "info-box",
+    "title": "Quick Facts",
+    "data": {
+      "items": [
+        "18.7M Canadians eligible for $250 rebate",
+        "$150,000 income threshold for rebate",
+        "2-month GST/HST holiday period",
+        "$1.6B total immediate relief"
+      ]
+    }
+  }
+]

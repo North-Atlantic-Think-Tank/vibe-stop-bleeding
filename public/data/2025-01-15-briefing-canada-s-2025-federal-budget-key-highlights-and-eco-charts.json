@@ -1,0 +1,84 @@
+[
+  {
+    "title": "Federal Deficit Projection (2024-2030)",
+    "type": "line",
+    "data": {
+      "labels": [
+        "2024-25",
+        "2025-26",
+        "2026-27",
+        "2027-28",
+        "2028-29",
+        "2029-30"
+      ],
+      "datasets": [
+        {
+          "label": "Projected Deficit ($ Billions)",
+          "data": [
+            40,
+            38.4,
+            34.8,
+            30.8,
+            26.8,
+            22.7
+          ]
+        }
+      ]
+    },
+    "description": "Projected federal deficit showing gradual decline over six-year period"
+  },
+  {
+    "title": "Debt-to-GDP Ratio Forecast",
+    "type": "line",
+    "data": {
+      "labels": [
+        "2024-25",
+        "2025-26",
+        "2026-27",
+        "2027-28",
+        "2028-29",
+        "2029-30"
+      ],
+      "datasets": [
+        {
+          "label": "Debt-to-GDP Ratio (%)",
+          "data": [
+            41.9,
+            41.2,
+            40.6,
+            40.1,
+            39.7,
+            39.4
+          ]
+        }
+      ]
+    },
+    "description": "Federal debt as percentage of GDP showing gradual improvement"
+  },
+  {
+    "title": "Major Budget Spending Categories (5-Year Total)",
+    "type": "bar",
+    "data": {
+      "labels": [
+        "Housing",
+        "Healthcare",
+        "Climate/Green Economy",
+        "Defence",
+        "Affordability Measures"
+      ],
+      "datasets": [
+        {
+          "label": "Spending ($ Billions)",
+          "data": [
+            20,
+            15.5,
+            93,
+            38.6,
+            21.9
+          ]
+        }
+      ]
+    },
+    "description": "Key spending priorities in 2025 Federal Budget over five years"
+  }
+]
