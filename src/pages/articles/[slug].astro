@@ -125,7 +125,7 @@ const renderedContent = article.content
           <section class="mt-12">
             <h2 class="text-3xl font-bold font-sans mb-6">Data Analysis</h2>
             {article.charts.map((chart: any, index: number) => (
-              <Chart key={index} chart={chart} client:load />
+              <Chart chart={chart} client:load />
             ))}
           </section>
         )

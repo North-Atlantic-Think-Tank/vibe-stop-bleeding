@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type ReactElement } from 'react';
 import {
   LineChart,
   Line,
@@ -16,27 +16,64 @@ import {
 } from 'recharts';
 
 export interface ChartData {
-  type: 'line' | 'bar' | 'pie';
+  type: 'line' | 'bar' | 'pie' | 'stacked-bar';
   title: string;
-  data: any[];
+  data: any[] | { labels: string[]; datasets: any[] };
   xKey?: string;
   yKey?: string;
   dataKey?: string;
   nameKey?: string;
+  description?: string;
 }
 
 interface ChartProps {
   chart: ChartData;
 }
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
+const COLORS = [
+  '#0088FE',
+  '#00C49F',
+  '#FFBB28',
+  '#FF8042',
+  '#8884D8',
+  '#82CA9D',
+];
+
+// Transform labels/datasets format to flat array format for Recharts
+function transformChartData(data: any): any[] {
+  if (Array.isArray(data)) {
+    return data;
+  }
+
+  // Handle labels/datasets format
+  if (data && data.labels && data.datasets) {
+    return data.labels.map((label: string, index: number) => {
+      const entry: any = { name: label };
+      data.datasets.forEach((dataset: any) => {
+        const key = dataset.label || 'value';
+        entry[key] = dataset.data[index];
+      });
+      return entry;
+    });
+  }
+
+  return [];
+}
 
 export default function Chart({ chart }: ChartProps) {
+  const chartData = transformChartData(chart.data);
+
   const renderChart = () => {
+    // Get all data keys except 'name' for multi-series charts
+    const dataKeys =
+      chartData.length > 0
+        ? Object.keys(chartData[0]).filter((k) => k !== 'name')
+        : [];
+
     switch (chart.type) {
       case 'line':
         return (
-          <LineChart data={chart.data}>
+          <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey={chart.xKey || 'name'} />
             <YAxis />
@@ -44,7 +81,7 @@ export default function Chart({ chart }: ChartProps) {
             <Legend />
             <Line
               type="monotone"
-              dataKey={chart.yKey || 'value'}
+              dataKey={chart.yKey || dataKeys[0] || 'value'}
               stroke="#FF0000"
               strokeWidth={2}
               dot={{ fill: '#FF0000', r: 4 }}
@@ -54,13 +91,45 @@ export default function Chart({ chart }: ChartProps) {
 
       case 'bar':
         return (
-          <BarChart data={chart.data}>
+          <BarChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey={chart.xKey || 'name'} />
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey={chart.yKey || 'value'} fill="#FF0000" />
+            {dataKeys.length > 1 ? (
+              dataKeys.map((key, index) => (
+                <Bar
+                  key={key}
+                  dataKey={key}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))
+            ) : (
+              <Bar
+                dataKey={chart.yKey || dataKeys[0] || 'value'}
+                fill="#FF0000"
+              />
+            )}
+          </BarChart>
+        );
+
+      case 'stacked-bar':
+        return (
+          <BarChart data={chartData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey={chart.xKey || 'name'} />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            {dataKeys.map((key, index) => (
+              <Bar
+                key={key}
+                dataKey={key}
+                stackId="a"
+                fill={COLORS[index % COLORS.length]}
+              />
+            ))}
           </BarChart>
         );
 
@@ -68,16 +137,19 @@ export default function Chart({ chart }: ChartProps) {
         return (
           <PieChart>
             <Pie
-              data={chart.data}
-              dataKey={chart.dataKey || 'value'}
+              data={chartData}
+              dataKey={chart.dataKey || dataKeys[0] || 'value'}
               nameKey={chart.nameKey || 'name'}
               cx="50%"
               cy="50%"
               outerRadius={100}
               label
             >
-              {chart.data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              {chartData.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
               ))}
             </Pie>
             <Tooltip />
@@ -92,9 +164,11 @@ export default function Chart({ chart }: ChartProps) {
 
   return (
     <div className="my-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
-      <h3 className="text-xl font-bold font-sans mb-4 text-gray-900">{chart.title}</h3>
+      <h3 className="text-xl font-bold font-sans mb-4 text-gray-900">
+        {chart.title}
+      </h3>
       <ResponsiveContainer width="100%" height={400}>
-        {renderChart()}
+        {renderChart() as ReactElement}
       </ResponsiveContainer>
     </div>
   );
