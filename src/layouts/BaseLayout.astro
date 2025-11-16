@@ -54,6 +54,14 @@ const siteUrl = 'https://stopbleeding.ca';
 
     <!-- Sitemap -->
     <link rel="sitemap" href={`${base}/sitemap-index.xml`} />
+
+    <!-- RSS Feed -->
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="stopbleeding.ca RSS Feed"
+      href={`${base}/rss.xml`}
+    />
   </head>
   <body class="antialiased">
     <slot />
