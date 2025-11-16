@@ -1,0 +1,30 @@
+[
+  {
+    "id": "fiscal-pressures-magnitude",
+    "type": "bar",
+    "title": "Annual Fiscal Pressures Facing Budget 2025",
+    "description": "Estimated annual costs or gaps for key policy areas",
+    "data": {
+      "labels": [
+        "Defence Gap",
+        "Healthcare Growth",
+        "Housing Investment",
+        "Infrastructure Deficit (Annual)",
+        "Debt Servicing Increase"
+      ],
+      "datasets": [
+        {
+          "label": "Estimated Annual Cost ($B CAD)",
+          "data": [
+            20,
+            15,
+            12,
+            8,
+            6
+          ],
+          "backgroundColor": "rgba(220, 38, 38, 0.7)"
+        }
+      ]
+    }
+  }
+]
