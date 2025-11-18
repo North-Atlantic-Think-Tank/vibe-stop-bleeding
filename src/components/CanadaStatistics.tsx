@@ -7,7 +7,6 @@ import {
   getChangeColor,
   type EconomyStatWidget,
 } from '../data/canadaEconomyStats';
-import RainEffectAdvanced from './RainEffectAdvanced';
 
 interface WidgetData extends EconomyStatWidget {
   animatedValue: number;
@@ -98,28 +97,23 @@ export default function CanadaStatistics() {
       ref={containerRef}
       className="statis-map relative w-full bg-slate-50 overflow-hidden min-h-screen"
     >
-      {/* Canada Map Background with Rain Effect - Disabled on mobile for performance */}
-      {!isMobile &&
-        containerDimensions.width > 0 &&
-        containerDimensions.height > 0 && (
-          <div
-            className="absolute inset-0 z-0 opacity-30"
-            style={{ pointerEvents: 'none' }}
-          >
-            <RainEffectAdvanced
-              key="rain-effect-static" // Keep same key to prevent remounting
-              backgroundImage={`${base}/images/maple_in_winter_sml.jpg`}
-              width={containerDimensions.width}
-              height={containerDimensions.height}
-              rainIntensity={15}
-              windStrength={0}
-              glassDistortion={20}
-            />
-          </div>
-        )}
+      {/* Background video section */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover z-0"
+      >
+        <source src={`${base}/videos/maple_in_snow_s.mp4`} type="video/mp4" />
+      </video>
+
+      {/* Overlay to darken video for better text readability */}
+      {/* NO NEED TO HAVE THIS, THE VIDEO IS VAGUE ENOUGH */}
+      {/* <div className="absolute inset-0 bg-black/20 z-[1]"></div> */}
 
       {/* Widget Grid */}
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 md:px-8 py-6 md:py-10">
+      <div className="relative z-20 container mx-auto px-4 sm:px-6 md:px-8 py-6 md:py-10">
         <div
           className="grid gap-4 sm:gap-6 md:gap-8 lg:gap-10"
           style={{
@@ -132,11 +126,11 @@ export default function CanadaStatistics() {
               widget.year2023Value,
             );
             const color2024 = getChangeColor(change2024, widget.isNegativeGood);
-
+            // == create one stat widget ==
             return (
               <div
                 key={widget.id}
-                className="bg-white backdrop-blur-sm rounded-lg p-3 sm:p-4 border-2 border-gray-200 hover:border-canadian-red hover:shadow-xl transition-all duration-300 cursor-pointer active:scale-95 md:hover:scale-105"
+                className="bg-white/95 backdrop-blur-md rounded-lg p-3 sm:p-4 border-2 border-gray-200 hover:border-canadian-red hover:shadow-xl transition-all duration-300 cursor-pointer active:scale-95 md:hover:scale-105"
                 onMouseEnter={(e) => {
                   setHoveredWidget(widget);
                 }}

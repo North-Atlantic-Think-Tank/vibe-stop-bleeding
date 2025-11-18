@@ -34,6 +34,11 @@ interface SmallDrop {
   graphics: PIXI.Graphics;
 }
 
+/**
+ * @deprecated due to the bad performance!!! - @2025/11/18
+ * @param param0
+ * @returns
+ */
 const RainEffectAdvanced: React.FC<RainEffectAdvancedProps> = ({
   backgroundImage = '',
   width = 800,
@@ -52,6 +57,7 @@ const RainEffectAdvanced: React.FC<RainEffectAdvancedProps> = ({
   const displacementFilterRef = useRef<PIXI.DisplacementFilter | null>(null);
   const isDestroyingRef = useRef(false);
   const initializedRef = useRef(false);
+  const isVisibleRef = useRef(false);
   const [isLoading, setIsLoading] = useState(true);
 
   // Create displacement texture with perlin-like noise
@@ -408,10 +414,10 @@ const RainEffectAdvanced: React.FC<RainEffectAdvancedProps> = ({
         const texture = await PIXI.Assets.load(backgroundImage);
         const background = new PIXI.Sprite(texture);
 
-        // const scaleX = width / background.width;
-        // const scaleY = height / background.height;
-        // const scale = Math.max(scaleX, scaleY);
-        // background.scale.set(scale);
+        const scaleX = width / background.width;
+        const scaleY = height / background.height;
+        const scale = Math.max(scaleX, scaleY);
+        background.scale.set(scale);
         // background.x = (width - background.width * scale) / 2;
         // background.y = (height - background.height * scale) / 2;
 
@@ -460,16 +466,20 @@ const RainEffectAdvanced: React.FC<RainEffectAdvancedProps> = ({
       const animate = () => {
         if (isDestroyingRef.current) return;
 
-        const currentTime = Date.now();
-        const timeSinceLastFrame = currentTime - lastFrameTime;
+        // Only animate if component is visible in viewport
+        if (isVisibleRef.current) {
+          const currentTime = Date.now();
+          const timeSinceLastFrame = currentTime - lastFrameTime;
 
-        // Only update if enough time has passed (throttle to 30 FPS)
-        if (timeSinceLastFrame >= targetFrameTime) {
-          const deltaTime = Math.min((currentTime - lastTime) / 1000, 0.1);
-          lastTime = currentTime;
-          lastFrameTime = currentTime - (timeSinceLastFrame % targetFrameTime);
+          // Only update if enough time has passed (throttle to 30 FPS)
+          if (timeSinceLastFrame >= targetFrameTime) {
+            const deltaTime = Math.min((currentTime - lastTime) / 1000, 0.1);
+            lastTime = currentTime;
+            lastFrameTime =
+              currentTime - (timeSinceLastFrame % targetFrameTime);
 
-          updateRaindrops(deltaTime, app, rainContainer);
+            updateRaindrops(deltaTime, app, rainContainer);
+          }
         }
 
         if (!isDestroyingRef.current) {
@@ -572,6 +582,51 @@ const RainEffectAdvanced: React.FC<RainEffectAdvancedProps> = ({
       initializedRef.current = false;
     };
   }, [backgroundImage]); // Only reinitialize when background image changes, not dimensions
+
+  // Viewport visibility observer
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          // Component is considered visible when it's at least partially in viewport
+          const wasVisible = isVisibleRef.current;
+          isVisibleRef.current = entry.isIntersecting;
+
+          // Log visibility changes for debugging
+          if (wasVisible !== entry.isIntersecting) {
+            console.log(
+              `RainEffectAdvanced visibility changed: ${
+                entry.isIntersecting ? 'visible' : 'hidden'
+              }`,
+            );
+          }
+
+          // If becoming visible after being hidden, update last time to prevent huge delta
+          if (entry.isIntersecting && !wasVisible && appRef.current) {
+            // Reset timing to prevent animation jump
+            const animate = () => {
+              if (isDestroyingRef.current || !isVisibleRef.current) return;
+              animationFrameRef.current = requestAnimationFrame(animate);
+            };
+          }
+        });
+      },
+      {
+        // Trigger when any part of the component is visible
+        threshold: 0,
+        // Add some margin to start rendering slightly before fully visible
+        rootMargin: '50px',
+      },
+    );
+
+    observer.observe(containerRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   return (
     <div
