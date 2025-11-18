@@ -30,7 +30,8 @@ export default function CanadaStatistics() {
       setWidgetData((prevData) =>
         prevData.map((widget) => ({
           ...widget,
-          animatedValue: widget.animatedValue + widget.perSecondIncrease,
+          animatedValue:
+            widget.animatedValue + Math.ceil(widget.perSecondIncrease),
         })),
       );
     }, 1000);
@@ -153,7 +154,7 @@ export default function CanadaStatistics() {
                     {formatValue(widget.animatedValue, widget)}
                   </div>
                   <div className="text-xs text-gray-500 mt-0.5 sm:mt-1">
-                    +{formatValue(widget.perSecondIncrease, widget)}/sec
+                    +{widget.perSecondIncrease}/sec
                   </div>
                 </div>
 
