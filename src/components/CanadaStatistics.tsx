@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { base } from '../config';
 import {
   economyWidgets,
   formatValue,
@@ -6,8 +7,7 @@ import {
   getChangeColor,
   type EconomyStatWidget,
 } from '../data/canadaEconomyStats';
-
-import { base } from '../config';
+import RainEffectAdvanced from './RainEffectAdvanced';
 
 interface WidgetData extends EconomyStatWidget {
   animatedValue: number;
@@ -44,7 +44,7 @@ export default function CanadaStatistics() {
 
   // Calculate grid columns based on screen size
   const getGridCols = () => {
-    if (typeof window === 'undefined') return 4;
+    if (typeof window === 'undefined') return 1; // Default to 1 column for SSR
     const width = window.innerWidth;
     if (width < 640) return 1;
     if (width < 1024) return 2;
@@ -52,35 +52,75 @@ export default function CanadaStatistics() {
     return 4;
   };
 
-  const [gridCols, setGridCols] = useState(getGridCols());
+  const [gridCols, setGridCols] = useState(1); // Start with 1 column to match SSR
+  const [containerDimensions, setContainerDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
+  const [isMobile, setIsMobile] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleResize = () => {
       setGridCols(getGridCols());
+
+      // Check if mobile device (disable rain effect on mobile for performance)
+      const screenWidth = window.innerWidth;
+      setIsMobile(screenWidth < 768); // Disable on tablets and phones
+
+      // Update container dimensions for RainEffect
+      if (containerRef.current) {
+        const { width, height } = containerRef.current.getBoundingClientRect();
+
+        // Only update if dimensions actually changed (avoid infinite loop)
+        setContainerDimensions((prev) => {
+          if (
+            Math.abs(prev.width - width) > 1 ||
+            Math.abs(prev.height - height) > 1
+          ) {
+            return { width, height };
+          }
+          return prev;
+        });
+      }
     };
+
+    // Initial size calculation - delay to ensure DOM is ready
+    setTimeout(handleResize, 100);
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return (
-    <div className="statis-map relative w-full bg-slate-50 overflow-hidden">
-      {/* Canada Map Background with Bleeding Effect */}
-      <div className="absolute inset-0 z-0">
-        <div
-          className="w-full h-full bg-cover bg-center opacity-10"
-          style={{
-            backgroundImage: `url(${base}/images/canada_map_wide_2.png)`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-      </div>
+    <div
+      ref={containerRef}
+      className="statis-map relative w-full bg-slate-50 overflow-hidden min-h-screen"
+    >
+      {/* Canada Map Background with Rain Effect - Disabled on mobile for performance */}
+      {!isMobile &&
+        containerDimensions.width > 0 &&
+        containerDimensions.height > 0 && (
+          <div
+            className="absolute inset-0 z-0 opacity-30"
+            style={{ pointerEvents: 'none' }}
+          >
+            <RainEffectAdvanced
+              key="rain-effect-static" // Keep same key to prevent remounting
+              backgroundImage={`${base}/images/maple_in_winter_sml.jpg`}
+              width={containerDimensions.width}
+              height={containerDimensions.height}
+              rainIntensity={15}
+              windStrength={0}
+              glassDistortion={20}
+            />
+          </div>
+        )}
 
       {/* Widget Grid */}
-      <div className="relative z-10 container mx-auto px-4 pt-6">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 md:px-8 py-6 md:py-10">
         <div
-          className="grid gap-4"
+          className="grid gap-4 sm:gap-6 md:gap-8 lg:gap-10"
           style={{
             gridTemplateColumns: `repeat(${gridCols}, minmax(0, 1fr))`,
           }}
@@ -95,7 +135,7 @@ export default function CanadaStatistics() {
             return (
               <div
                 key={widget.id}
-                className="bg-white/90 backdrop-blur-sm rounded-xl p-6 border-2 border-gray-200 hover:border-canadian-red hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:scale-105"
+                className="bg-white backdrop-blur-sm rounded-lg p-3 sm:p-4 border-2 border-gray-200 hover:border-canadian-red hover:shadow-xl transition-all duration-300 cursor-pointer active:scale-95 md:hover:scale-105"
                 onMouseEnter={(e) => {
                   setHoveredWidget(widget);
                 }}
@@ -103,22 +143,22 @@ export default function CanadaStatistics() {
                 onClick={() => setSelectedWidget(widget)}
               >
                 {/* Title */}
-                <h3 className="text-sm font-bold text-gray-700 mb-3 uppercase tracking-wide">
+                <h3 className="text-xs sm:text-xs font-bold text-gray-700 mb-1.5 sm:mb-2 uppercase tracking-wide line-clamp-2">
                   {widget.title}
                 </h3>
 
                 {/* Animated Current Value */}
-                <div className="mb-2">
-                  <div className="text-3xl md:text-4xl font-bold text-canadian-red">
+                <div className="mb-1.5 sm:mb-2">
+                  <div className="text-xl sm:text-2xl md:text-3xl font-bold text-canadian-red leading-tight">
                     {formatValue(widget.animatedValue, widget)}
                   </div>
-                  <div className="text-xs text-gray-500 mt-1">
+                  <div className="text-xs text-gray-500 mt-0.5 sm:mt-1">
                     +{formatValue(widget.perSecondIncrease, widget)}/sec
                   </div>
                 </div>
 
                 {/* Comparisons */}
-                <div className="space-y-1 text-xs">
+                <div className="space-y-0.5 sm:space-y-1 text-xs">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600">2024:</span>
                     <span className="font-semibold text-gray-800">
@@ -145,10 +185,10 @@ export default function CanadaStatistics() {
         </div>
       </div>
 
-      {/* Hover Tooltip */}
-      {hoveredWidget && !selectedWidget && (
+      {/* Hover Tooltip - Hidden on mobile/tablets */}
+      {hoveredWidget && !selectedWidget && !isMobile && (
         <div
-          className="fixed bg-white/95 backdrop-blur-sm rounded-lg shadow-xl p-6 max-w-md border border-gray-200 z-20 animate-fadeIn"
+          className="hidden lg:block fixed bg-white/95 backdrop-blur-sm rounded-lg shadow-xl p-6 max-w-md border border-gray-200 z-20 animate-fadeIn"
           style={{
             top: '20px',
             right: '20px',
@@ -174,25 +214,25 @@ export default function CanadaStatistics() {
       {/* Expanded Widget Modal */}
       {selectedWidget && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-30 p-4 animate-fadeIn"
+          className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-30 p-2 sm:p-4 animate-fadeIn overflow-y-auto"
           onClick={() => setSelectedWidget(null)}
         >
           <div
-            className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-slideUp"
+            className="bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto animate-slideUp my-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-8">
+            <div className="p-4 sm:p-6 md:p-8">
               {/* Header */}
-              <div className="flex items-start justify-between mb-6 pb-4 border-b-2 border-gray-200">
-                <h2 className="text-3xl font-bold text-gray-900">
+              <div className="flex items-start justify-between mb-4 sm:mb-6 pb-3 sm:pb-4 border-b-2 border-gray-200">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 pr-2">
                   {selectedWidget.title}
                 </h2>
                 <button
                   onClick={() => setSelectedWidget(null)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-100 rounded-full"
+                  className="text-gray-400 hover:text-gray-600 transition-colors p-1.5 sm:p-2 hover:bg-gray-100 rounded-full flex-shrink-0"
                 >
                   <svg
-                    className="w-6 h-6"
+                    className="w-5 h-5 sm:w-6 sm:h-6"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -208,15 +248,15 @@ export default function CanadaStatistics() {
               </div>
 
               {/* Stats Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div className="bg-gradient-to-br from-canadian-red to-red-700 text-white rounded-xl p-6 shadow-lg">
-                  <div className="text-sm font-semibold mb-2 opacity-90">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                <div className="bg-gradient-to-br from-canadian-red to-red-700 text-white rounded-lg sm:rounded-xl p-4 sm:p-6 shadow-lg">
+                  <div className="text-xs sm:text-sm font-semibold mb-1.5 sm:mb-2 opacity-90">
                     Current Value (Live)
                   </div>
-                  <div className="text-4xl font-bold mb-2">
+                  <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1.5 sm:mb-2">
                     {formatValue(selectedWidget.animatedValue, selectedWidget)}
                   </div>
-                  <div className="text-sm opacity-80">
+                  <div className="text-xs sm:text-sm opacity-80">
                     Increasing +
                     {formatValue(
                       selectedWidget.perSecondIncrease,
@@ -226,15 +266,15 @@ export default function CanadaStatistics() {
                   </div>
                 </div>
 
-                <div className="bg-slate-50 rounded-xl p-6 shadow-md">
-                  <div className="text-sm text-gray-600 mb-2 font-semibold">
+                <div className="bg-slate-50 rounded-lg sm:rounded-xl p-4 sm:p-6 shadow-md">
+                  <div className="text-xs sm:text-sm text-gray-600 mb-1.5 sm:mb-2 font-semibold">
                     2024 Official Value
                   </div>
-                  <div className="text-4xl font-bold text-gray-900 mb-2">
+                  <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-1.5 sm:mb-2">
                     {formatValue(selectedWidget.year2024Value, selectedWidget)}
                   </div>
                   <div
-                    className="text-sm font-bold"
+                    className="text-xs sm:text-sm font-bold"
                     style={{
                       color: getChangeColor(
                         calculateChangePercent(
@@ -261,20 +301,20 @@ export default function CanadaStatistics() {
                   </div>
                 </div>
 
-                <div className="bg-slate-50 rounded-xl p-6 shadow-md">
-                  <div className="text-sm text-gray-600 mb-2 font-semibold">
+                <div className="bg-slate-50 rounded-lg sm:rounded-xl p-4 sm:p-6 shadow-md">
+                  <div className="text-xs sm:text-sm text-gray-600 mb-1.5 sm:mb-2 font-semibold">
                     2023 Value
                   </div>
-                  <div className="text-4xl font-bold text-gray-900">
+                  <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">
                     {formatValue(selectedWidget.year2023Value, selectedWidget)}
                   </div>
                 </div>
 
-                <div className="bg-slate-50 rounded-xl p-6 shadow-md">
-                  <div className="text-sm text-gray-600 mb-2 font-semibold">
+                <div className="bg-slate-50 rounded-lg sm:rounded-xl p-4 sm:p-6 shadow-md">
+                  <div className="text-xs sm:text-sm text-gray-600 mb-1.5 sm:mb-2 font-semibold">
                     Annual Change (2023-2024)
                   </div>
-                  <div className="text-4xl font-bold text-gray-900">
+                  <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">
                     {formatValue(
                       Math.abs(
                         selectedWidget.year2024Value -
@@ -283,7 +323,7 @@ export default function CanadaStatistics() {
                       selectedWidget,
                     )}
                   </div>
-                  <div className="text-sm text-gray-600 mt-1">
+                  <div className="text-xs sm:text-sm text-gray-600 mt-1">
                     {selectedWidget.year2024Value > selectedWidget.year2023Value
                       ? 'Increase'
                       : 'Decrease'}
@@ -292,18 +332,18 @@ export default function CanadaStatistics() {
               </div>
 
               {/* Key Insights */}
-              <div className="mb-8">
-                <h3 className="font-bold text-xl mb-4 text-gray-900 flex items-center">
-                  <span className="w-1 h-6 bg-canadian-red mr-3 rounded"></span>
+              <div className="mb-6 sm:mb-8">
+                <h3 className="font-bold text-lg sm:text-xl mb-3 sm:mb-4 text-gray-900 flex items-center">
+                  <span className="w-1 h-5 sm:h-6 bg-canadian-red mr-2 sm:mr-3 rounded"></span>
                   Key Insights
                 </h3>
-                <ul className="space-y-3 bg-slate-50 rounded-xl p-6">
+                <ul className="space-y-2 sm:space-y-3 bg-slate-50 rounded-lg sm:rounded-xl p-4 sm:p-6">
                   {selectedWidget.keyInsights.map((insight, idx) => (
                     <li
                       key={idx}
-                      className="text-gray-700 flex items-start leading-relaxed"
+                      className="text-sm sm:text-base text-gray-700 flex items-start leading-relaxed"
                     >
-                      <span className="text-canadian-red mr-3 mt-1 font-bold text-lg">
+                      <span className="text-canadian-red mr-2 sm:mr-3 mt-0.5 sm:mt-1 font-bold text-base sm:text-lg flex-shrink-0">
                         •
                       </span>
                       <span>{insight}</span>
@@ -314,18 +354,18 @@ export default function CanadaStatistics() {
 
               {/* Full Description */}
               <div>
-                <h3 className="font-bold text-xl mb-4 text-gray-900 flex items-center">
-                  <span className="w-1 h-6 bg-canadian-red mr-3 rounded"></span>
+                <h3 className="font-bold text-lg sm:text-xl mb-3 sm:mb-4 text-gray-900 flex items-center">
+                  <span className="w-1 h-5 sm:h-6 bg-canadian-red mr-2 sm:mr-3 rounded"></span>
                   Detailed Analysis
                 </h3>
-                <p className="text-gray-700 leading-relaxed bg-slate-50 rounded-xl p-6">
+                <p className="text-sm sm:text-base text-gray-700 leading-relaxed bg-slate-50 rounded-lg sm:rounded-xl p-4 sm:p-6">
                   {selectedWidget.fullDescription}
                 </p>
               </div>
 
               {/* Source Footer */}
-              <div className="mt-8 pt-6 border-t border-gray-200 text-center">
-                <p className="text-sm text-gray-500">
+              <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200 text-center">
+                <p className="text-xs sm:text-sm text-gray-500">
                   Data compiled from Statistics Canada, TransUnion, Equifax, and
                   Government of Canada sources
                 </p>
