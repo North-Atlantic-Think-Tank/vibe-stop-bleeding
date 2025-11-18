@@ -82,14 +82,13 @@ export const economyWidgets: EconomyStatWidget[] = [
   },
   {
     id: 'unemployment',
-    title: 'Unemployment',
-    currentValue: 6.9, // Unemployment rate percentage
-    unit: '%',
-    suffix: '%',
+    title: 'Unemployment Amount',
+    currentValue: 1500000, // Unemployment people amount
+    unit: 'people',
     perSecondIncrease: 5.3, // People becoming unemployed per second
     year2024Value: 6.7,
     year2023Value: 5.5,
-    format: 'percentage',
+    format: 'number',
     decimals: 1,
     isNegativeGood: true,
     keyInsights: [
@@ -275,7 +274,8 @@ export function formatValue(value: number, widget: EconomyStatWidget): string {
     } else if (value >= 1000000) {
       formatted = (value / 1000000).toFixed(decimals) + 'M';
     } else if (value >= 1000) {
-      formatted = (value / 1000).toFixed(decimals) + 'K';
+      // formatted = (value / 1000).toFixed(decimals) + 'K';
+      formatted = value.toFixed(decimals);
     } else {
       formatted = value.toFixed(decimals);
     }
@@ -291,6 +291,7 @@ export function calculateChangePercent(
   current: number,
   previous: number,
 ): number {
+  if (current < 100 && previous < 100) return current - previous;
   return ((current - previous) / previous) * 100;
 }
 
