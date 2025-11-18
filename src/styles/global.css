@@ -18,7 +18,13 @@
 
 @layer components {
   .newspaper-header {
-    @apply text-4xl md:text-6xl font-bold text-center border-b-4 border-canadian-red py-4;
+    @apply text-2xl md:text-4xl font-bold text-center py-2;
+    font-family: 'Georgia', serif;
+    letter-spacing: 0.05em;
+  }
+
+  .newspaper-header-compact {
+    @apply text-xl md:text-2xl font-bold;
     font-family: 'Georgia', serif;
     letter-spacing: 0.05em;
   }
@@ -37,4 +43,8 @@
     @apply prose-a:text-canadian-red prose-a:no-underline hover:prose-a:underline;
     @apply prose-p:leading-relaxed prose-p:text-justify;
   }
+}
+
+.statis-map {
+  min-height: calc(100vh - 100px);
 }

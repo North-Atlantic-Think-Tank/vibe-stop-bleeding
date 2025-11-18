@@ -5,7 +5,14 @@ This report provides detailed statistics on key Canadian economic indicators for
 
 ---
 
+Belowing are the 12 widgets data source:
+
 ## 1. Credit Card Debt
+
+### statistics for 2025
+- **Total Debt**: Total consumer credit balances reached approximately $2.52 trillion in Q2 2025, a 4.4% year-over-year (YoY) increase.
+- **Average Credit Card Balance**: The average credit card balance per Canadian was estimated at $4,499 in Q1 2025, an increase from previous years. Other reports placed the average at approximately $4,185 in early 2025.
+- **Delinquencies**: Approximately 1.4 million Canadians missed at least one credit payment in Q1 2025, a level not seen since 2009. The 90+ day non-mortgage delinquency rate for younger Canadians (Gen Z and Late Millennials) saw a significant jump of nearly 20% YoY in Q2 2025.
 
 ### 2024 Data
 - **Total credit card debt**: $124 billion CAD (Q4 2024)

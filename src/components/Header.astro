@@ -11,25 +11,23 @@ const navItems = [
 const currentPath = Astro.url.pathname;
 ---
 
-<header class="bg-white shadow-sm">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<header class="bg-white shadow-sm border-b-2 border-canadian-red">
+  <div class="max-w-7xl mx-auto sm:px-1 lg:px-2">
     <!-- Masthead -->
-    <div class="text-center py-8">
-      <h1 class="newspaper-header">
+    <div class="py-3 flex justify-center gap-3">
+      <h1 class="newspaper-header-compact">
         <a
           href="/"
+          title="Canadian News Analysis"
           class="text-gray-900 no-underline hover:text-canadian-red transition-colors"
         >
           Stopbleeding Canada
         </a>
       </h1>
-      <p class="text-sm text-gray-600 mt-2 font-sans uppercase tracking-wider">
-        Canadian News Analysis
-      </p>
     </div>
 
     <!-- Navigation -->
-    <nav class="py-4">
+    <nav class="py-3">
       <ul
         class="flex flex-wrap justify-center gap-4 md:gap-8 font-sans text-sm font-semibold uppercase tracking-wide"
       >

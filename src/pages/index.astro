@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ArticleCard from '../components/ArticleCard.astro';
+import CanadaStatistics from '../components/CanadaStatistics.tsx';
 import { readdir, readFile } from 'fs/promises';
 import { join } from 'path';
 import { base } from '../config';
@@ -52,6 +53,9 @@ const recentArticles = allArticles.slice(1, 11); // Next 10 articles
 
 <BaseLayout>
   <Header />
+
+  <!-- Canada Statistics Component -->
+  <CanadaStatistics client:load />
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <!-- Featured Article Section -->
