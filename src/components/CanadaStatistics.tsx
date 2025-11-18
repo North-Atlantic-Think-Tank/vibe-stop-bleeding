@@ -7,6 +7,8 @@ import {
   type EconomyStatWidget,
 } from '../data/canadaEconomyStats';
 
+import { base } from '../config';
+
 interface WidgetData extends EconomyStatWidget {
   animatedValue: number;
 }
@@ -68,7 +70,7 @@ export default function CanadaStatistics() {
         <div
           className="w-full h-full bg-cover bg-center opacity-10"
           style={{
-            backgroundImage: 'url(/images/canada_map_wide_2.png)',
+            backgroundImage: `url(${base}/images/canada_map_wide_2.png)`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
