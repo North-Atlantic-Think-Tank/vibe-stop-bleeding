@@ -90,7 +90,6 @@ export const economyWidgets: EconomyStatWidget[] = [
     year2023Value: 5.5,
     format: 'number',
     decimals: 1,
-    isNegativeGood: true,
     keyInsights: [
       'Total unemployed: ~1.5 million people',
       'Long-term unemployment (27+ weeks): 23.7%',
@@ -110,7 +109,6 @@ export const economyWidgets: EconomyStatWidget[] = [
     year2023Value: 53600,
     format: 'number',
     decimals: 0,
-    isNegativeGood: true,
     keyInsights: [
       'Point-in-time count: 60,000 (Fall 2024)',
       '79% increase since last count (2020-22)',
@@ -130,7 +128,6 @@ export const economyWidgets: EconomyStatWidget[] = [
     year2023Value: 8700000,
     format: 'number',
     decimals: 0,
-    isNegativeGood: true,
     keyInsights: [
       '25.5% of Canadian population affected',
       'Children affected: 2.5 million',
@@ -300,10 +297,13 @@ export function getChangeColor(
   isNegativeGood: boolean = false,
 ): string {
   const isPositive = percent > 0;
-
+  const palette = {
+    green: '#10B981',
+    red: '#EF4444',
+  };
   if (isNegativeGood) {
-    return isPositive ? '#EF4444' : '#10B981'; // Red if increase, green if decrease
+    return isPositive ? palette.green : palette.red; // Green if increase, red if decrease
   }
 
-  return isPositive ? '#10B981' : '#EF4444'; // Green if increase, red if decrease
+  return isPositive ? palette.red : palette.green; // Red if increase, green if decrease
 }
