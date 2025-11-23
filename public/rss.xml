@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>stopbleeding.ca</title>
+    <link>https://stopbleeding.ca</link>
+    <description>Canadian News Analysis</description>
+    <language>en-ca</language>
+    <atom:link href="https://stopbleeding.ca/rss.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>The Carney Paradox: Elbows Up, Knees Down</title>
+      <link>https://stopbleeding.ca/articles/2025-11-23-the-carney-paradox-elbows-up-knees-down</link>
+      <description>Six months into his mandate, Prime Minister Mark Carney's confrontational rhetoric toward the United States stands in stark contrast to his accommodating policy actions. This investigation reveals the growing gap between campaign promises and governing reality, and asks: where is this contradiction leading Canada?</description>
+      <pubDate>Sun, 23 Nov 2025 00:00:00 GMT</pubDate>
+      <category>politics</category>
+    </item>
+
+    <item>
+      <title>Briefing: Canada's 2025 Federal Budget - Key Highlights and Economic Measures</title>
+      <link>https://stopbleeding.ca/articles/2025-11-16-briefing-canada-s-2025-federal-budget-key-highlights-and-economic-measures</link>
+      <description>The 2025 Canadian Federal Budget introduces tax relief measures, affordability initiatives, and housing investments totaling billions in new spending amid economic uncertainty.</description>
+      <pubDate>Sun, 16 Nov 2025 00:00:00 GMT</pubDate>
+      <category>economy</category>
+    </item>
+
+    <item>
+      <title>Briefing: Canada's Parliamentary Budget Officer Flags Critical Fiscal Challenges for Budget 2025</title>
+      <link>https://stopbleeding.ca/articles/2025-11-16-briefing-canada-s-parliamentary-budget-officer-flags-critical-fiscal-challenges-for-budget-2025</link>
+      <description>PBO identifies seven critical fiscal issues facing parliamentarians ahead of Budget 2025, including housing affordability, carbon pricing uncertainty, defence spending gaps, and healthcare system pressures.</description>
+      <pubDate>Sun, 16 Nov 2025 00:00:00 GMT</pubDate>
+      <category>economy</category>
+    </item>
+
+    <item>
+      <title>Briefing: Canada's Budget 2025 - Historic Shift Toward Defense, Infrastructure, and Fiscal Discipline</title>
+      <link>https://stopbleeding.ca/articles/2025-11-15-briefing-canada-s-budget-2025-historic-shift-toward-defense-infrastructure-and-fiscal-discipline</link>
+      <description>Canada's Budget 2025 represents a generational pivot from operational spending to capital investment, with $280B allocated over five years toward defense, infrastructure, housing, and productivity while maintaining the lowest net debt-to-GDP ratio in the G7.</description>
+      <pubDate>Sat, 15 Nov 2025 00:00:00 GMT</pubDate>
+      <category>economy</category>
+    </item>
+
+    <item>
+      <title>Canadian Economy Shows Resilience Amid Global Uncertainty</title>
+      <link>https://stopbleeding.ca/articles/2025-11-14-canadian-economy-shows-resilience-amid-global-uncertainty</link>
+      <description>undefined</description>
+      <pubDate>Fri, 14 Nov 2025 00:00:00 GMT</pubDate>
+      <category>economy</category>
+    </item>
+
+    <item>
+      <title>Provincial Education Funding Reforms Spark Debate Across Canada</title>
+      <link>https://stopbleeding.ca/articles/2025-11-13-provincial-education-funding-reforms-spark-debate-across-canada</link>
+      <description>undefined</description>
+      <pubDate>Thu, 13 Nov 2025 00:00:00 GMT</pubDate>
+      <category>education</category>
+    </item>
+  </channel>
+</rss>

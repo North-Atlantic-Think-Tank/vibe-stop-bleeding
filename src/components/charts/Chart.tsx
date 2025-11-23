@@ -15,6 +15,13 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
+export interface LineConfig {
+  dataKey: string;
+  stroke?: string;
+  name?: string;
+  strokeWidth?: number;
+}
+
 export interface ChartData {
   type: 'line' | 'bar' | 'pie' | 'stacked-bar';
   title: string;
@@ -24,6 +31,17 @@ export interface ChartData {
   dataKey?: string;
   nameKey?: string;
   description?: string;
+  lines?: LineConfig[];
+  yKeys?: string[];
+  config?: {
+    yAxisLabel?: string;
+    xAxisLabel?: string;
+    legend?: boolean;
+    strokeWidth?: number;
+    color?: string;
+    stacked?: boolean;
+    colors?: Record<string, string>;
+  };
 }
 
 interface ChartProps {
@@ -76,16 +94,32 @@ export default function Chart({ chart }: ChartProps) {
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey={chart.xKey || 'name'} />
-            <YAxis />
+            <YAxis label={{ value: chart.config?.yAxisLabel || '', angle: -90, position: 'insideLeft' }} />
             <Tooltip />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey={chart.yKey || dataKeys[0] || 'value'}
-              stroke="#FF0000"
-              strokeWidth={2}
-              dot={{ fill: '#FF0000', r: 4 }}
-            />
+            {chart.config?.legend !== false && <Legend />}
+            {chart.lines && chart.lines.length > 0 ? (
+              // Multiple lines from 'lines' array
+              chart.lines.map((lineConfig, index) => (
+                <Line
+                  key={lineConfig.dataKey}
+                  type="monotone"
+                  dataKey={lineConfig.dataKey}
+                  stroke={lineConfig.stroke || COLORS[index % COLORS.length]}
+                  strokeWidth={lineConfig.strokeWidth || chart.config?.strokeWidth || 2}
+                  name={lineConfig.name || lineConfig.dataKey}
+                  dot={{ fill: lineConfig.stroke || COLORS[index % COLORS.length], r: 4 }}
+                />
+              ))
+            ) : (
+              // Single line using yKey or first dataKey
+              <Line
+                type="monotone"
+                dataKey={chart.yKey || dataKeys[0] || 'value'}
+                stroke={chart.config?.color || '#FF0000'}
+                strokeWidth={chart.config?.strokeWidth || 2}
+                dot={{ fill: chart.config?.color || '#FF0000', r: 4 }}
+              />
+            )}
           </LineChart>
         );
 
@@ -94,10 +128,20 @@ export default function Chart({ chart }: ChartProps) {
           <BarChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey={chart.xKey || 'name'} />
-            <YAxis />
+            <YAxis label={{ value: chart.config?.yAxisLabel || '', angle: -90, position: 'insideLeft' }} />
             <Tooltip />
-            <Legend />
-            {dataKeys.length > 1 ? (
+            {chart.config?.legend !== false && <Legend />}
+            {chart.yKeys && chart.yKeys.length > 0 ? (
+              // Multiple bars from yKeys array (e.g., stacked bars)
+              chart.yKeys.map((key, index) => (
+                <Bar
+                  key={key}
+                  dataKey={key}
+                  stackId={chart.config?.stacked ? 'stack' : undefined}
+                  fill={chart.config?.colors?.[key] || COLORS[index % COLORS.length]}
+                />
+              ))
+            ) : dataKeys.length > 1 ? (
               dataKeys.map((key, index) => (
                 <Bar
                   key={key}
@@ -108,7 +152,7 @@ export default function Chart({ chart }: ChartProps) {
             ) : (
               <Bar
                 dataKey={chart.yKey || dataKeys[0] || 'value'}
-                fill="#FF0000"
+                fill={chart.config?.color || '#FF0000'}
               />
             )}
           </BarChart>
