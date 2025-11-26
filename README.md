@@ -148,6 +148,23 @@ npm run workflow:publish -- content/articles/2025-11-14-article.json
 
 Converts JSON to markdown and prepares for web publishing.
 
+#### Write editorial commentary:
+```bash
+npm run workflow:commentary -- content/articles/investigation.json
+```
+
+Generates an editorial commentary article based on a journalist investigation. This will:
+1. Read the investigation JSON file
+2. Use the Editor-in-Chief agent to write commentary (800-1500 words)
+3. Provide editorial perspective and analysis on the findings
+4. Save as new JSON with "editorial" tags
+5. Publish to markdown format
+
+Example:
+```bash
+npm run workflow:commentary -- content/articles/2025-11-23-carney-paradox-rhetoric-reality-gap.json
+```
+
 ### Multi-Agent Orchestration
 
 For complex tasks requiring multiple agents:
@@ -263,6 +280,11 @@ npm run workflow:daily
 ### Publish existing article:
 ```bash
 npm run workflow:publish -- content/articles/2025-11-14-budget-analysis.json
+```
+
+### Write editorial commentary on investigation:
+```bash
+npm run workflow:commentary -- content/articles/2025-11-23-carney-paradox-rhetoric-reality-gap.json
 ```
 
 ## 🎯 Best Practices

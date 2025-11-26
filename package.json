@@ -15,7 +15,8 @@
     "developer:push-docs": "node agents/developer/push-docs.js",
     "publish": "npm run developer:push-docs",
     "workflow:daily": "node agents/workflow/daily-cycle.js",
-    "workflow:publish": "node agents/workflow/publish.js"
+    "workflow:publish": "node agents/workflow/publish.js",
+    "workflow:commentary": "node agents/workflow/commentary.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.0",
