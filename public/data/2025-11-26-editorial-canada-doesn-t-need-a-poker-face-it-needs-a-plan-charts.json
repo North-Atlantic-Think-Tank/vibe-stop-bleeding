@@ -1,0 +1,82 @@
+[
+  {
+    "id": "carney-contradiction-timeline",
+    "type": "timeline",
+    "title": "The Carney Contradiction: Rhetoric vs. Reality",
+    "description": "Six months of contradictory statements and actions",
+    "data": {
+      "events": [
+        {
+          "date": "2025-01",
+          "rhetoric": "I will keep counter-tariffs until Americans show us respect",
+          "reality": "Campaign promise"
+        },
+        {
+          "date": "2025-03",
+          "rhetoric": "The old Canada-US relationship is over",
+          "reality": "Removes Canadian counter-tariffs on CUSMA goods"
+        },
+        {
+          "date": "2025-04",
+          "rhetoric": "Trump is trying to break us",
+          "reality": "Victory speech"
+        },
+        {
+          "date": "2025-05",
+          "rhetoric": "We will get an even better deal",
+          "reality": "Rules out new counter-tariffs during talks"
+        },
+        {
+          "date": "2025-06",
+          "rhetoric": "—",
+          "reality": "Apologizes to Trump for Reagan advertisement"
+        },
+        {
+          "date": "2025-07",
+          "rhetoric": "—",
+          "reality": "Commits to increased military spending at US request"
+        },
+        {
+          "date": "2025-11",
+          "rhetoric": "The world can move on without the US",
+          "reality": "Still negotiating with US; 73% export dependence unchanged"
+        }
+      ]
+    }
+  },
+  {
+    "id": "canada-us-export-dependence",
+    "type": "line",
+    "title": "Canada's Unchanging US Export Dependence",
+    "description": "Percentage of Canadian exports to United States, 2024-2025",
+    "data": {
+      "labels": [
+        "Jan 2024",
+        "Apr 2024",
+        "Jul 2024",
+        "Oct 2024",
+        "Jan 2025",
+        "May 2025",
+        "Jul 2025",
+        "Nov 2025"
+      ],
+      "datasets": [
+        {
+          "label": "% of Exports to US",
+          "data": [
+            76,
+            76,
+            76,
+            76,
+            75,
+            68.3,
+            73,
+            73
+          ],
+          "borderColor": "#d32f2f",
+          "backgroundColor": "rgba(211, 47, 47, 0.1)"
+        }
+      ]
+    }
+  }
+]

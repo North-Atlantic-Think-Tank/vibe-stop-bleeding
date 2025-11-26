@@ -1,4 +1,6 @@
 ---
+import { base } from '../config';
+
 const currentYear = new Date().getFullYear();
 ---
 
@@ -20,28 +22,28 @@ const currentYear = new Date().getFullYear();
         <ul class="space-y-2 text-sm">
           <li>
             <a
-              href="/category/politics"
+              href={`${base}/category/politics`}
               class="text-gray-400 hover:text-white transition-colors"
               >Politics</a
             >
           </li>
           <li>
             <a
-              href="/category/economy"
+              href={`${base}/category/economy`}
               class="text-gray-400 hover:text-white transition-colors"
               >Economy</a
             >
           </li>
           <li>
             <a
-              href="/category/employment"
+              href={`${base}/category/employment`}
               class="text-gray-400 hover:text-white transition-colors"
               >Employment</a
             >
           </li>
           <li>
             <a
-              href="/category/education"
+              href={`${base}/category/education`}
               class="text-gray-400 hover:text-white transition-colors"
               >Education</a
             >
@@ -55,21 +57,21 @@ const currentYear = new Date().getFullYear();
         <ul class="space-y-2 text-sm">
           <li>
             <a
-              href="/about"
+              href={`${base}/about`}
               class="text-gray-400 hover:text-white transition-colors"
               >About Us</a
             >
           </li>
           <li>
             <a
-              href="/rss.xml"
+              href={`${base}/rss.xml`}
               class="text-gray-400 hover:text-white transition-colors"
               >RSS Feed</a
             >
           </li>
           <li>
             <a
-              href="https://github.com/stopbleeding-ca"
+              href="https://github.com/North-Atlantic-Think-Tank/vibe-stop-bleeding"
               class="text-gray-400 hover:text-white transition-colors">GitHub</a
             >
           </li>
@@ -82,7 +84,7 @@ const currentYear = new Date().getFullYear();
       class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400"
     >
       <p>&copy; {currentYear} stopbleeding.ca. All rights reserved.</p>
-      <p class="mt-2">Powered by AI and Canadian data sources.</p>
+      <p class="mt-2">Powered by Claude AI and NATT.</p>
     </div>
   </div>
 </footer>
