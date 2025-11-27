@@ -9,6 +9,8 @@ import path from 'path';
  * Supports three artistic styles: moderate, aggressive, satirical
  */
 
+const imageFormat = 'jpeg';
+
 /**
  * Style configurations for different artistic approaches
  */
@@ -94,7 +96,7 @@ async function generateImageFromAPI(prompt, negativePrompt, outputPath) {
     const formData = new FormData();
     formData.append('prompt', prompt);
     formData.append('negative_prompt', negativePrompt);
-    formData.append('output_format', 'png');
+    formData.append('output_format', imageFormat);
 
     // Set aspect ratio to 2:1 (width:height)
     // Using 1024x512 for good quality at 2:1 ratio
@@ -172,7 +174,7 @@ export async function generateCoverImage(
 
   const outputPath = path.join(
     outputDir,
-    `${fileName}-${styleConfig.suffix}.png`,
+    `${fileName}-${styleConfig.suffix}.${imageFormat}`,
   );
   const prompt = buildPrompt(articleData, style);
 
@@ -261,7 +263,7 @@ export async function generateCoverFromArticle(
   const slug = (articleData.title || 'untitled')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
-    .substring(0, 50);
+    .substring(0, 30);
   const fileName = `${date}-${slug}`;
 
   if (singleStyle) {
