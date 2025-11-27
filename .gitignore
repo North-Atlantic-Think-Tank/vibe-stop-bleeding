@@ -4,6 +4,7 @@ node_modules/
 dist/
 .astro/
 content/drafts/
+agents/shared/
 agents/workflow/log-*.json
 agents/workflow/orchestration-*.json
 agents/developer/plan-*.md
