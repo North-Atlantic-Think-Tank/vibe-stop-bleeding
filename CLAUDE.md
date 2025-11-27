@@ -160,7 +160,9 @@ const articleData = { title: '...', summary: '...', category: 'politics' };
 const result = await generateCoverImage(articleData, 'aggressive');
 ```
 
-**Output Location**: `public/images/covers/[date]-[slug]-[style].png`
+**Output Location**: `public/images/covers/[date]-[slug]-[style].jpeg`
+
+**Automatic Thumbnail Generation**: Cover generation now automatically creates low-resolution thumbnail placeholders (~800 bytes) for optimized lazy loading. Thumbnails are saved to `public/images/thumbnails/` and can also be generated separately using `npm run thumbnails:generate`. See `docs/LAZY_LOADING.md` for details.
 
 ## Content Output Locations
 
@@ -169,7 +171,8 @@ const result = await generateCoverImage(articleData, 'aggressive');
 - **Research Drafts**: `content/drafts/research-*.md`
 - **Workflow Logs**: `agents/workflow/log-*.json`
 - **Chart Data**: `public/data/*-charts.json`
-- **Cover Images**: `public/images/covers/*-[style].png` (AI-generated article covers)
+- **Cover Images**: `public/images/covers/*-[style].jpeg` (AI-generated article covers)
+- **Thumbnails**: `public/images/thumbnails/*-[style].jpg` (Low-res placeholders for lazy loading)
 
 ## Canadian Content Focus
 

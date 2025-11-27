@@ -2,11 +2,13 @@ import 'dotenv/config';
 
 import fs from 'fs/promises';
 import path from 'path';
+import { generateThumbnailFromAPIResponse } from './thumbnail-generator.js';
 
 /**
  * Cover Image Generator
  * Generates article cover images using Stability AI API
  * Supports three artistic styles: moderate, aggressive, satirical
+ * Automatically generates thumbnail placeholders for lazy loading
  */
 
 const imageFormat = 'jpeg';
@@ -80,9 +82,17 @@ function buildPrompt(articleData, style = 'moderate') {
  * @param {string} prompt - Image generation prompt
  * @param {string} negativePrompt - Negative prompt (what to avoid)
  * @param {string} outputPath - Path to save the generated image
- * @returns {Promise<string>} Path to generated image
+ * @param {string} fileName - Base filename for thumbnail generation
+ * @param {string} style - Style variant for thumbnail generation
+ * @returns {Promise<Object>} Object with image path and thumbnail data
  */
-async function generateImageFromAPI(prompt, negativePrompt, outputPath) {
+async function generateImageFromAPI(
+  prompt,
+  negativePrompt,
+  outputPath,
+  fileName,
+  style,
+) {
   const STABILITY_API_KEY = process.env.STABILITY_API_KEY;
   const STABILITY_API_BASE_URL =
     process.env.STABILITY_API_BASE_URL ||
@@ -129,7 +139,24 @@ async function generateImageFromAPI(prompt, negativePrompt, outputPath) {
     await fs.writeFile(outputPath, imageBuffer);
 
     console.log(`🎨 Generated image: ${outputPath}`);
-    return outputPath;
+
+    // Generate thumbnail immediately from the same buffer
+    let thumbnailData = null;
+    try {
+      thumbnailData = await generateThumbnailFromAPIResponse(
+        imageBuffer,
+        fileName,
+        style,
+      );
+      console.log(`📦 Generated thumbnail: ${thumbnailData.path}`);
+    } catch (error) {
+      console.warn(`⚠️  Failed to generate thumbnail: ${error.message}`);
+    }
+
+    return {
+      imagePath: outputPath,
+      thumbnail: thumbnailData,
+    };
   } catch (error) {
     console.error(`Error generating image: ${error.message}`);
     throw error;
@@ -142,7 +169,7 @@ async function generateImageFromAPI(prompt, negativePrompt, outputPath) {
  * @param {string} style - Style variant: 'moderate', 'aggressive', or 'satirical'
  * @param {string} outputDir - Directory to save images (default: public/images/covers)
  * @param {string} fileName - Base filename without extension (optional, auto-generated from title)
- * @returns {Promise<Object>} Object with style, path, and prompt used
+ * @returns {Promise<Object>} Object with style, path, thumbnail, and prompt used
  */
 export async function generateCoverImage(
   articleData,
@@ -181,15 +208,18 @@ export async function generateCoverImage(
   console.log(`\n🎨 Generating ${styleConfig.name} style cover image...`);
   console.log(`📝 Prompt: ${prompt.substring(0, 100)}...`);
 
-  const imagePath = await generateImageFromAPI(
+  const result = await generateImageFromAPI(
     prompt,
     styleConfig.negativePrompt,
     outputPath,
+    fileName,
+    styleConfig.suffix,
   );
 
   return {
     style,
-    path: imagePath,
+    path: result.imagePath,
+    thumbnail: result.thumbnail,
     prompt,
     styleConfig,
   };
