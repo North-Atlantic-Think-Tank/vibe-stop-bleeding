@@ -1,11 +1,13 @@
 ---
+import { readdir, readFile } from 'fs/promises';
+import { join } from 'path';
+import { marked } from 'marked';
+
+import { base } from '../../config';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import Chart from '../../components/charts/Chart';
-import { readdir, readFile } from 'fs/promises';
-import { join } from 'path';
-import { marked } from 'marked';
 
 export async function getStaticPaths() {
   try {
@@ -79,7 +81,7 @@ const renderedContent = article.content
   description={article.content
     ? article.content.split('\n\n')[0].substring(0, 160)
     : ''}
-  image={article.seo?.ogImage || undefined}
+  image={article.seo?.ogImage ? `${base}${article.seo.ogImage}` : undefined}
 >
   <Header />
 
@@ -95,7 +97,9 @@ const renderedContent = article.content
           {article.title}
         </h1>
 
-        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600 font-sans">
+        <div
+          class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600 font-sans"
+        >
           <div class="flex items-center gap-2">
             <time datetime={article.date}>{formattedDate}</time>
           </div>
@@ -109,7 +113,9 @@ const renderedContent = article.content
                 <span class="hidden sm:inline">•</span>
                 <div class="flex flex-wrap gap-2">
                   {article.tags.map((tag: string) => (
-                    <span class="text-canadian-red whitespace-nowrap">#{tag}</span>
+                    <span class="text-canadian-red whitespace-nowrap">
+                      #{tag}
+                    </span>
                   ))}
                 </div>
               </>
@@ -123,7 +129,7 @@ const renderedContent = article.content
         article.seo?.ogImage && (
           <div class="mb-8">
             <img
-              src={article.seo.ogImage}
+              src={`${base}${article.seo.ogImage}`}
               alt={article.title}
               class="w-full h-auto rounded-lg shadow-lg"
               loading="eager"
