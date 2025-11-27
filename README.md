@@ -74,7 +74,16 @@ Articles are stored as JSON files in `content/articles/` following this schema:
       "xKey": "name",
       "yKey": "value"
     }
-  ]
+  ],
+  "sources": [
+    {"title": "Source Name", "url": "https://..."}
+  ],
+  "tags": ["tag1", "tag2"],
+  "seo": {
+    "metaDescription": "...",
+    "keywords": [...],
+    "ogImage": "..."
+  }
 }
 ```
 

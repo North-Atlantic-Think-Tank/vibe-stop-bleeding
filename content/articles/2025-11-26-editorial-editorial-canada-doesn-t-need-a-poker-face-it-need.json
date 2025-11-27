@@ -70,16 +70,7 @@
         "datasets": [
           {
             "label": "% of Exports to US",
-            "data": [
-              76,
-              76,
-              76,
-              76,
-              75,
-              68.3,
-              73,
-              73
-            ],
+            "data": [76, 76, 76, 76, 75, 68.3, 73, 73],
             "borderColor": "#d32f2f",
             "backgroundColor": "rgba(211, 47, 47, 0.1)"
           }
@@ -169,7 +160,7 @@
       "Carney Trump policy",
       "honest political leadership"
     ],
-    "ogImage": "/images/editorials/carney-poker-face.jpg",
+    "ogImage": "/images/covers/2025-11-26-editorial-canada-doesn-t-need-a-poker-face-it-need-satirical.png",
     "canonicalUrl": "https://stopbleeding.ca/editorials/canada-needs-plan-not-poker-face"
   }
 }

@@ -185,7 +185,8 @@ You are the Workflow Coordinator for the stopbleeding.ca AI team, managing the c
   "tags": ["tag1", "tag2"],
   "seo": {
     "metaDescription": "...",
-    "keywords": ["keyword1", "keyword2"]
+    "keywords": ["keyword1", "keyword2"],
+    "ogImage": "..."
   }
 }
 ```
