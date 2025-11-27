@@ -54,6 +54,8 @@ npm run editor:research [category]   # Research specific category
 npm run editor:write -- "Topic"      # Write article on specific topic
 npm run workflow:daily               # Full cycle: research → write → save
 npm run workflow:publish -- file.json # Convert JSON to markdown
+npm run workflow:covergen -- file.json # Generate cover images (all 3 styles)
+npm run workflow:covergen -- file.json --style=moderate  # Generate single style
 
 node agents/shared/orchestrator.js "Complex task"  # Multi-agent coordination
 node agents/shared/scheduler.js      # Start automated scheduling
@@ -113,6 +115,53 @@ Use `agents/shared/data-converter.js` for format conversion:
 - `markdownToJson()`: Parse markdown to JSON
 - `generateRSSFeed()`: Create RSS feed from articles
 
+Use `agents/shared/cover-generator.js` for cover image generation:
+- `generateCoverImage(articleData, style)`: Generate single style cover image
+- `generateAllCoverVariants(articleData)`: Generate all 3 style variants
+- `generateCoverFromArticle(jsonPath)`: Generate from article JSON file
+
+### Cover Image Generation
+
+The platform uses **Stability AI** to generate article cover images in three distinct styles:
+
+**Three Artistic Styles**:
+1. **Moderate**: Professional editorial news illustration with balanced composition and muted colors
+2. **Aggressive**: Bold dramatic imagery with strong contrast and vibrant colors
+3. **Satirical**: Political satire illustration with clever visual metaphors and editorial cartoon style
+
+**API Configuration**:
+- Requires `STABILITY_API_KEY` and `STABILITY_API_BASE_URL` in `.env`
+- Images generated at 21:9 aspect ratio (closest to 2:1 supported by Stability AI)
+- Model: `sd3-large-turbo` for fast high-quality generation
+
+**CLI Usage**:
+```bash
+# Generate all three styles
+npm run workflow:covergen -- content/articles/2025-11-26-article.json
+
+# Generate single style
+npm run workflow:covergen -- content/articles/2025-11-26-article.json --style=moderate
+npm run workflow:covergen -- content/articles/2025-11-26-article.json --style=aggressive
+npm run workflow:covergen -- content/articles/2025-11-26-article.json --style=satirical
+```
+
+**Programmatic Usage** (for integration with other workflows):
+```javascript
+import { generateCoverFromArticle, generateCoverImage } from './agents/shared/cover-generator.js';
+
+// Generate all three styles
+const results = await generateCoverFromArticle('path/to/article.json');
+
+// Generate specific style
+const result = await generateCoverFromArticle('path/to/article.json', false, 'moderate');
+
+// Or generate from article data directly
+const articleData = { title: '...', summary: '...', category: 'politics' };
+const result = await generateCoverImage(articleData, 'aggressive');
+```
+
+**Output Location**: `public/images/covers/[date]-[slug]-[style].png`
+
 ## Content Output Locations
 
 - **Article JSON**: `content/articles/*.json` (structured data from Editor)
@@ -120,6 +169,7 @@ Use `agents/shared/data-converter.js` for format conversion:
 - **Research Drafts**: `content/drafts/research-*.md`
 - **Workflow Logs**: `agents/workflow/log-*.json`
 - **Chart Data**: `public/data/*-charts.json`
+- **Cover Images**: `public/images/covers/*-[style].png` (AI-generated article covers)
 
 ## Canadian Content Focus
 

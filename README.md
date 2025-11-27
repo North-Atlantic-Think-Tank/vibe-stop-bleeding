@@ -229,7 +229,8 @@ Articles use a standardized JSON format:
   "tags": ["tag1", "tag2"],
   "seo": {
     "metaDescription": "...",
-    "keywords": [...]
+    "keywords": [...],
+    "ogImage": "..."
   }
 }
 ```

@@ -79,6 +79,7 @@ const renderedContent = article.content
   description={article.content
     ? article.content.split('\n\n')[0].substring(0, 160)
     : ''}
+  image={article.seo?.ogImage || undefined}
 >
   <Header />
 
@@ -116,6 +117,20 @@ const renderedContent = article.content
           }
         </div>
       </header>
+
+      <!-- Cover Image -->
+      {
+        article.seo?.ogImage && (
+          <div class="mb-8">
+            <img
+              src={article.seo.ogImage}
+              alt={article.title}
+              class="w-full h-auto rounded-lg shadow-lg"
+              loading="eager"
+            />
+          </div>
+        )
+      }
 
       <!-- Article Content -->
       <div
