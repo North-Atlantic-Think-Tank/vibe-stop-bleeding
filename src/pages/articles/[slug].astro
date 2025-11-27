@@ -8,6 +8,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import Chart from '../../components/charts/Chart';
+import LazyImage from '../../components/LazyImage';
 
 export async function getStaticPaths() {
   try {
@@ -74,6 +75,16 @@ marked.setOptions({
 const renderedContent = article.content
   ? await marked.parse(article.content)
   : '';
+
+// Get thumbnail path from cover image path
+function getThumbnailPath(coverPath: string | undefined) {
+  if (!coverPath) return undefined;
+  const fileName = coverPath.split('/').pop()?.replace('.jpeg', '.jpg');
+  return fileName ? `${base}/images/thumbnails/${fileName}` : undefined;
+}
+
+const coverImagePath = article.seo?.ogImage ? `${base}${article.seo.ogImage}` : undefined;
+const thumbnailPath = getThumbnailPath(article.seo?.ogImage);
 ---
 
 <BaseLayout
@@ -124,15 +135,16 @@ const renderedContent = article.content
         </div>
       </header>
 
-      <!-- Cover Image -->
+      <!-- Cover Image with Lazy Loading -->
       {
-        article.seo?.ogImage && (
+        coverImagePath && (
           <div class="mb-8">
-            <img
-              src={`${base}${article.seo.ogImage}`}
+            <LazyImage
+              src={coverImagePath}
+              thumbnail={thumbnailPath}
               alt={article.title}
-              class="w-full h-auto rounded-lg shadow-lg"
-              loading="eager"
+              className="w-full h-auto rounded-lg shadow-lg"
+              client:load
             />
           </div>
         )
