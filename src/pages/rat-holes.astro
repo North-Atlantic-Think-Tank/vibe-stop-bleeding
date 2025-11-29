@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import RatHoles from '../components/RatHoles';
+import RatHolesComponent from '../components/RatHoles';
 
 const title = 'Rat Holes - Tracking Government Spending | stopbleeding.ca';
 const description =
@@ -13,7 +13,7 @@ const description =
   <Header />
 
   <!-- Rat Holes Component -->
-  <RatHoles client:load />
+  <RatHolesComponent client:load />
 
   <Footer />
 </BaseLayout>
