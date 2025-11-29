@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import RatHoles from '../components/RatHoles';
+
+const title = 'Rat Holes - Tracking Government Spending | stopbleeding.ca';
+const description =
+  'Track questionable Canadian government spending - NGO grants, foreign aid, corporate subsidies, and more. See where your tax dollars go.';
+---
+
+<BaseLayout title={title} description={description}>
+  <Header />
+
+  <!-- Rat Holes Component -->
+  <RatHoles client:load />
+
+  <Footer />
+</BaseLayout>
