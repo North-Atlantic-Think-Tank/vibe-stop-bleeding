@@ -59,10 +59,11 @@ const categoryColors: Record<string, string> = {
   economy: 'bg-green-600',
   employment: 'bg-purple-600',
   education: 'bg-orange-600',
+  international: 'bg-red-600',
   general: 'bg-gray-600',
 };
 
-const bgColor =
+const categoryColor =
   categoryColors[article.category.toLowerCase()] || categoryColors.general;
 
 // Configure marked for safe rendering
@@ -83,7 +84,9 @@ function getThumbnailPath(coverPath: string | undefined) {
   return fileName ? `${base}/images/thumbnails/${fileName}` : undefined;
 }
 
-const coverImagePath = article.seo?.ogImage ? `${base}${article.seo.ogImage}` : undefined;
+const coverImagePath = article.seo?.ogImage
+  ? `${base}${article.seo.ogImage}`
+  : undefined;
 const thumbnailPath = getThumbnailPath(article.seo?.ogImage);
 ---
 
@@ -100,7 +103,7 @@ const thumbnailPath = getThumbnailPath(article.seo?.ogImage);
     <article>
       <!-- Article Header -->
       <header class="mb-8 pb-8 border-b-2 border-gray-300">
-        <span class={`category-tag ${bgColor}`}>
+        <span class={`category-tag ${categoryColor}`}>
           {article.category}
         </span>
 
@@ -177,7 +180,11 @@ const thumbnailPath = getThumbnailPath(article.seo?.ogImage);
               {article.sources.map((source: any, index: number) => (
                 <li class="text-sm">
                   <a
-                    href={source.url}
+                    href={
+                      source.url.startsWith('https')
+                        ? source.url
+                        : `${base}/${source.url}`
+                    }
                     target="_blank"
                     rel="noopener noreferrer"
                     class="text-canadian-red hover:underline"

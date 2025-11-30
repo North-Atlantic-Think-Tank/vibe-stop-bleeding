@@ -7,7 +7,7 @@ import { readdir, readFile } from 'fs/promises';
 import { join } from 'path';
 
 export async function getStaticPaths() {
-  const categories = ['politics', 'economy', 'employment', 'education', 'general'];
+  const categories = ['politics', 'economy', 'employment', 'education', 'international', 'general'];
 
   return categories.map(category => ({
     params: { category },
@@ -61,6 +61,7 @@ const categoryDescriptions: Record<string, string> = {
   economy: 'Economic trends, GDP, inflation, and financial market analysis for Canada',
   employment: 'Canadian job market insights, unemployment rates, and workforce trends',
   education: 'Updates on Canadian education policy, funding, and institutional changes',
+  international: 'Global affairs, foreign policy, and international developments affecting Canada',
   general: 'Comprehensive analysis of Canadian news and current affairs'
 };
 

@@ -41,9 +41,16 @@ npm run preview
 │   └── styles/
 │       └── global.css   # Global styles with Tailwind
 ├── content/
-│   └── articles/        # Article JSON files
-├── public/              # Static assets
-└── astro.config.mjs     # Astro configuration
+│   ├── articles/               # Published articles
+│   └── drafts/                 # Draft content
+├── public/
+│   ├── images/
+│   │   ├── covers/             # AI-generated cover images (3 styles per article)
+│   │   └── thumbnails/         # Low-res placeholders for lazy loading
+│   └── data/                   # Chart data
+├── package.json
+├── .env.example
+└── README.md
 ```
 
 ## 📝 Content Management
