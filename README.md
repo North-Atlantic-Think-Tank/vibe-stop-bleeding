@@ -50,7 +50,9 @@ vibe-stop-bleeding/
 │   ├── articles/               # Published articles
 │   └── drafts/                 # Draft content
 ├── public/
-│   ├── images/                 # Article images
+│   ├── images/
+│   │   ├── covers/             # AI-generated cover images (3 styles per article)
+│   │   └── thumbnails/         # Low-res placeholders for lazy loading
 │   └── data/                   # Chart data
 ├── package.json
 ├── .env.example
@@ -63,6 +65,7 @@ vibe-stop-bleeding/
 
 - Node.js 18+
 - Anthropic API key (Claude)
+- Stability AI API key (for cover image generation - optional)
 
 ### Installation
 
@@ -79,7 +82,10 @@ npm install
 3. Set up environment variables:
 ```bash
 cp .env.example .env
-# Edit .env and add your ANTHROPIC_API_KEY
+# Edit .env and add your API keys:
+# - ANTHROPIC_API_KEY (required for all agent tasks)
+# - STABILITY_API_KEY (optional, for cover image generation)
+# - STABILITY_API_BASE_URL (optional, defaults to Stability AI endpoint)
 ```
 
 ## 📖 Usage
@@ -147,6 +153,34 @@ npm run workflow:publish -- content/articles/2025-11-14-article.json
 ```
 
 Converts JSON to markdown and prepares for web publishing.
+
+#### Generate cover images and thumbnails:
+```bash
+# Generate all three artistic styles (moderate, aggressive, satirical)
+npm run workflow:covergen -- content/articles/2025-11-14-article.json
+
+# Generate all styles (explicit)
+npm run workflow:covergen -- content/articles/2025-11-14-article.json --all
+
+# Generate single style only
+npm run workflow:covergen -- content/articles/2025-11-14-article.json --style=moderate
+npm run workflow:covergen -- content/articles/2025-11-14-article.json --style=aggressive
+npm run workflow:covergen -- content/articles/2025-11-14-article.json --style=satirical
+```
+
+This will:
+1. Generate AI-powered cover images using Stability AI in requested style(s)
+2. Automatically create low-resolution thumbnail placeholders for lazy loading
+3. Save cover images to `public/images/covers/` (JPEG format, 21:9 aspect ratio)
+4. Save thumbnails to `public/images/thumbnails/` (~800 bytes each)
+5. Update article JSON with satirical cover path in `seo.ogImage` field
+
+**Three Artistic Styles:**
+- **Moderate**: Professional editorial illustration with balanced composition
+- **Aggressive**: Bold dramatic imagery with strong contrast and vibrant colors
+- **Satirical**: Political satire illustration with clever visual metaphors (used as default og:image)
+
+**Requirements:** Requires `STABILITY_API_KEY` and `STABILITY_API_BASE_URL` in `.env` file.
 
 #### Write editorial commentary:
 ```bash
@@ -281,6 +315,15 @@ npm run workflow:daily
 ### Publish existing article:
 ```bash
 npm run workflow:publish -- content/articles/2025-11-14-budget-analysis.json
+```
+
+### Generate cover images for article:
+```bash
+# Generate all three styles with thumbnails
+npm run workflow:covergen -- content/articles/2025-11-14-budget-analysis.json
+
+# Or generate only satirical style
+npm run workflow:covergen -- content/articles/2025-11-14-budget-analysis.json --style=satirical
 ```
 
 ### Write editorial commentary on investigation:

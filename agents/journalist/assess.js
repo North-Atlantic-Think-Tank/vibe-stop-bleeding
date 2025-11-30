@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import Anthropic from '@anthropic-ai/sdk';
 import fs from 'fs/promises';
 import path from 'path';
@@ -13,7 +15,7 @@ const anthropic = new Anthropic({
 async function assessInvestigation(trigger) {
   const journalistPrompt = await fs.readFile(
     path.join(process.cwd(), 'agents/journalist/prompt.md'),
-    'utf-8'
+    'utf-8',
   );
 
   const assessmentRequest = `Perform an initial assessment (Phase 1) for this potential investigation:
@@ -40,7 +42,9 @@ Provide your assessment in JSON format:
   "next_steps": ["Immediate actions if proceeding"]
 }`;
 
-  console.log('🔍 Investigative Journalist: Assessing potential investigation...\n');
+  console.log(
+    '🔍 Investigative Journalist: Assessing potential investigation...\n',
+  );
 
   const message = await anthropic.messages.create({
     model: 'claude-sonnet-4-5-20250929',
@@ -81,7 +85,7 @@ Provide your assessment in JSON format:
   const outputPath = path.join(
     process.cwd(),
     'content/investigations',
-    `assessment-${timestamp}-${slug}.json`
+    `assessment-${timestamp}-${slug}.json`,
   );
 
   // Ensure directory exists
@@ -90,7 +94,10 @@ Provide your assessment in JSON format:
 
   console.log('✅ Assessment completed!');
   console.log(`📄 Saved to: ${outputPath}\n`);
-  console.log('📊 Recommendation:', assessmentData.recommendation || 'See report');
+  console.log(
+    '📊 Recommendation:',
+    assessmentData.recommendation || 'See report',
+  );
   console.log('\n--- Full Assessment ---\n');
   console.log(JSON.stringify(assessmentData, null, 2));
 
@@ -101,10 +108,10 @@ Provide your assessment in JSON format:
 const trigger = process.argv.slice(2).join(' ');
 if (!trigger) {
   console.error(
-    'Usage: npm run journalist:assess -- "Description of the anomaly or trigger"'
+    'Usage: npm run journalist:assess -- "Description of the anomaly or trigger"',
   );
   console.error(
-    '\nExample: npm run journalist:assess -- "Ontario education spending up 20% but class sizes increased"'
+    '\nExample: npm run journalist:assess -- "Ontario education spending up 20% but class sizes increased"',
   );
   process.exit(1);
 }

@@ -3,6 +3,7 @@ import {
   // generateCoverImage,
   // generateAllCoverVariants,
 } from '../shared/cover-generator.js';
+import { generateThumbnailFromFile } from '../shared/thumbnail-generator.js';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -81,15 +82,44 @@ async function runCoverGen() {
       ];
     }
 
+    // Generate thumbnails for successfully created cover images
+    console.log('\n📦 Generating Thumbnails');
+    console.log('='.repeat(60));
+
+    const successful = results.filter((r) => !r.error);
+    const thumbnailResults = [];
+
+    for (const result of successful) {
+      try {
+        console.log(`\n📦 Generating thumbnail for ${result.style} style...`);
+        const thumbnailData = await generateThumbnailFromFile(result.path);
+        thumbnailResults.push({
+          style: result.style,
+          ...thumbnailData,
+        });
+        console.log(`✅ Thumbnail saved: ${thumbnailData.path}`);
+        console.log(
+          `   Size: ${thumbnailData.size} bytes (${thumbnailData.width}x${thumbnailData.height})`,
+        );
+      } catch (error) {
+        console.error(
+          `❌ Failed to generate thumbnail for ${result.style}: ${error.message}`,
+        );
+        thumbnailResults.push({
+          style: result.style,
+          error: error.message,
+        });
+      }
+    }
+
     // Display results
     console.log('\n📋 Generation Summary');
     console.log('='.repeat(60));
 
-    const successful = results.filter((r) => !r.error);
     const failed = results.filter((r) => r.error);
 
     if (successful.length > 0) {
-      console.log('\n✅ Successfully generated:');
+      console.log('\n✅ Successfully generated cover images:');
       successful.forEach((result) => {
         console.log(
           `\n  🎨 ${result.styleConfig?.name || result.style} Style:`,
@@ -97,6 +127,18 @@ async function runCoverGen() {
         console.log(`     📁 ${result.path}`);
         console.log(`     📝 ${result.prompt.substring(0, 80)}...`);
       });
+
+      const successfulThumbnails = thumbnailResults.filter((t) => !t.error);
+      if (successfulThumbnails.length > 0) {
+        console.log('\n📦 Successfully generated thumbnails:');
+        successfulThumbnails.forEach((thumb) => {
+          console.log(`\n  🖼️  ${thumb.style} Style:`);
+          console.log(`     📁 ${thumb.path}`);
+          console.log(
+            `     📊 ${thumb.size} bytes (${thumb.width}x${thumb.height})`,
+          );
+        });
+      }
     }
 
     if (failed.length > 0) {
@@ -133,19 +175,29 @@ async function runCoverGen() {
         await fs.writeFile(
           articlePath,
           JSON.stringify(articleData, null, 2),
-          'utf-8'
+          'utf-8',
         );
 
         console.log(`     ✅ Updated seo.ogImage: ${relativePath}`);
       } catch (error) {
-        console.error(`     ⚠️  Failed to update article JSON: ${error.message}`);
+        console.error(
+          `     ⚠️  Failed to update article JSON: ${error.message}`,
+        );
       }
+    } else {
+      console.warn(
+        `     ⚠️  No satirical cover image found to generate thumbnail!`,
+      );
     }
 
     console.log('\n' + '='.repeat(60));
     console.log(`✅ Cover generation workflow completed!`);
+    const successfulThumbnails = thumbnailResults.filter((t) => !t.error);
     console.log(
-      `📊 Success: ${successful.length}/${results.length} images generated\n`,
+      `📊 Cover Images: ${successful.length}/${results.length} generated`,
+    );
+    console.log(
+      `📊 Thumbnails: ${successfulThumbnails.length}/${successful.length} generated\n`,
     );
 
     if (failed.length > 0) {

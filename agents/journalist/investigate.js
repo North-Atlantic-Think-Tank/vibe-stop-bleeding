@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import Anthropic from '@anthropic-ai/sdk';
 import fs from 'fs/promises';
 import path from 'path';
@@ -13,7 +15,7 @@ const anthropic = new Anthropic({
 async function conductInvestigation(topic, context = '') {
   const journalistPrompt = await fs.readFile(
     path.join(process.cwd(), 'agents/journalist/prompt.md'),
-    'utf-8'
+    'utf-8',
   );
 
   const investigationRequest = `Conduct a full investigation on the following topic:
@@ -43,7 +45,9 @@ Output your findings in the full JSON format specified in your prompt, including
 
 Be thorough, evidence-based, and ensure all claims are defensible. Include specific data points, timeline, and clear documentation of your methodology.`;
 
-  console.log(`🕵️  Investigative Journalist: Beginning investigation into "${topic}"...\n`);
+  console.log(
+    `🕵️  Investigative Journalist: Beginning investigation into "${topic}"...\n`,
+  );
   console.log('⏳ This may take a few minutes for thorough research...\n');
 
   const message = await anthropic.messages.create({
@@ -85,7 +89,7 @@ Be thorough, evidence-based, and ensure all claims are defensible. Include speci
   const outputPath = path.join(
     process.cwd(),
     'content/investigations',
-    `investigation-${timestamp}-${slug}.json`
+    `investigation-${timestamp}-${slug}.json`,
   );
 
   // Ensure directory exists
@@ -100,7 +104,7 @@ Be thorough, evidence-based, and ensure all claims are defensible. Include speci
     const mdPath = path.join(
       process.cwd(),
       'content/articles',
-      `${timestamp}-investigation-${slug}.md`
+      `${timestamp}-investigation-${slug}.md`,
     );
 
     const frontmatter = `---
@@ -143,16 +147,14 @@ status: "${investigationData.status || 'completed'}"
 const args = process.argv.slice(2);
 if (args.length === 0) {
   console.error(
-    'Usage: npm run journalist:investigate -- "Investigation topic" [optional context]'
+    'Usage: npm run journalist:investigate -- "Investigation topic" [optional context]',
+  );
+  console.error('\nExamples:');
+  console.error(
+    '  npm run journalist:investigate -- "Ontario education funding discrepancies"',
   );
   console.error(
-    '\nExamples:'
-  );
-  console.error(
-    '  npm run journalist:investigate -- "Ontario education funding discrepancies"'
-  );
-  console.error(
-    '  npm run journalist:investigate -- "Housing affordability crisis" "Focus on Toronto and Vancouver"'
+    '  npm run journalist:investigate -- "Housing affordability crisis" "Focus on Toronto and Vancouver"',
   );
   process.exit(1);
 }

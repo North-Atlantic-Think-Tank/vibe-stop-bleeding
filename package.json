@@ -1,6 +1,6 @@
 {
   "name": "stopbleeding-ca",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "AI-powered Canadian news analysis platform",
   "type": "module",
   "scripts": {
@@ -12,6 +12,7 @@
     "editor:summary": "node agents/editor/summary.js",
     "journalist:assess": "node agents/journalist/assess.js",
     "journalist:investigate": "node agents/journalist/investigate.js",
+    "intl:investigate": "node agents/intljournalist/investigate.js",
     "developer:push-docs": "node agents/developer/push-docs.js",
     "publish": "npm run developer:push-docs",
     "workflow:daily": "node agents/workflow/daily-cycle.js",

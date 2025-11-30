@@ -119,7 +119,7 @@ const recentArticles = allArticles.slice(1, 11); // Next 10 articles
     <!-- Categories Quick Links -->
     <section class="mt-16 pt-16 border-t-2 border-gray-300">
       <h2 class="text-2xl font-bold font-sans mb-6">Browse by Category</h2>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
         <a
           href={`${base}/category/politics`}
           class="bg-blue-600 text-white p-6 text-center font-sans font-bold uppercase tracking-wide hover:bg-blue-700 transition-colors"
@@ -143,6 +143,12 @@ const recentArticles = allArticles.slice(1, 11); // Next 10 articles
           class="bg-orange-600 text-white p-6 text-center font-sans font-bold uppercase tracking-wide hover:bg-orange-700 transition-colors"
         >
           Education
+        </a>
+        <a
+          href={`${base}/category/international`}
+          class="bg-red-600 text-white p-6 text-center font-sans font-bold uppercase tracking-wide hover:bg-red-700 transition-colors"
+        >
+          International
         </a>
       </div>
     </section>

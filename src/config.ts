@@ -1,1 +1,1 @@
-export const base = 'https://stopbleeding.ca';
+export const base = 'http://localhost:4321';

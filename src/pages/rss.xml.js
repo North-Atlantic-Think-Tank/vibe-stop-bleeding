@@ -35,7 +35,7 @@ export async function GET(context) {
 
   return rss({
     title: 'stopbleeding.ca - Canadian News Analysis',
-    description: 'AI-powered analysis of Canadian politics, economy, employment, and education news',
+    description: 'AI-powered analysis of Canadian politics, economy, employment, education, and international affairs',
     site: context.site,
     items: articles.map((article) => ({
       title: article.title,
