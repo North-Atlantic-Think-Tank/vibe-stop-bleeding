@@ -95,7 +95,7 @@ const thumbnailPath = getThumbnailPath(article.seo?.ogImage);
   description={article.content
     ? article.content.split('\n\n')[0].substring(0, 160)
     : ''}
-  image={article.seo?.ogImage ? `${base}${article.seo.ogImage}` : undefined}
+  image={article.seo?.ogImage ? `${article.seo.ogImage}` : undefined}
 >
   <Header />
 
