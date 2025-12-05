@@ -41,6 +41,8 @@ export interface ChartData {
     color?: string;
     stacked?: boolean;
     colors?: Record<string, string>;
+    label?: string;
+    [key: string]: any;
   };
 }
 
@@ -94,7 +96,13 @@ export default function Chart({ chart }: ChartProps) {
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey={chart.xKey || 'name'} />
-            <YAxis label={{ value: chart.config?.yAxisLabel || '', angle: -90, position: 'insideLeft' }} />
+            <YAxis
+              label={{
+                value: chart.config?.yAxisLabel || '',
+                angle: -90,
+                position: 'insideLeft',
+              }}
+            />
             <Tooltip />
             {chart.config?.legend !== false && <Legend />}
             {chart.lines && chart.lines.length > 0 ? (
@@ -105,9 +113,14 @@ export default function Chart({ chart }: ChartProps) {
                   type="monotone"
                   dataKey={lineConfig.dataKey}
                   stroke={lineConfig.stroke || COLORS[index % COLORS.length]}
-                  strokeWidth={lineConfig.strokeWidth || chart.config?.strokeWidth || 2}
+                  strokeWidth={
+                    lineConfig.strokeWidth || chart.config?.strokeWidth || 2
+                  }
                   name={lineConfig.name || lineConfig.dataKey}
-                  dot={{ fill: lineConfig.stroke || COLORS[index % COLORS.length], r: 4 }}
+                  dot={{
+                    fill: lineConfig.stroke || COLORS[index % COLORS.length],
+                    r: 4,
+                  }}
                 />
               ))
             ) : (
@@ -128,7 +141,13 @@ export default function Chart({ chart }: ChartProps) {
           <BarChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey={chart.xKey || 'name'} />
-            <YAxis label={{ value: chart.config?.yAxisLabel || '', angle: -90, position: 'insideLeft' }} />
+            <YAxis
+              label={{
+                value: chart.config?.yAxisLabel || '',
+                angle: -90,
+                position: 'insideLeft',
+              }}
+            />
             <Tooltip />
             {chart.config?.legend !== false && <Legend />}
             {chart.yKeys && chart.yKeys.length > 0 ? (
@@ -138,7 +157,9 @@ export default function Chart({ chart }: ChartProps) {
                   key={key}
                   dataKey={key}
                   stackId={chart.config?.stacked ? 'stack' : undefined}
-                  fill={chart.config?.colors?.[key] || COLORS[index % COLORS.length]}
+                  fill={
+                    chart.config?.colors?.[key] || COLORS[index % COLORS.length]
+                  }
                 />
               ))
             ) : dataKeys.length > 1 ? (
@@ -178,21 +199,30 @@ export default function Chart({ chart }: ChartProps) {
         );
 
       case 'pie':
+        // Custom label renderer that includes the unit from config.label
+        const renderPieLabel = (entry: any) => {
+          const unit = chart.config?.label || '';
+          const percentage = entry.percent
+            ? `(${(entry.percent * 100).toFixed(1)}%)`
+            : '';
+          return `${entry.value} ${unit} ${percentage}`.trim();
+        };
+
         return (
           <PieChart>
             <Pie
               data={chartData}
-              dataKey={chart.dataKey || dataKeys[0] || 'value'}
-              nameKey={chart.nameKey || 'name'}
+              dataKey={chart.dataKey || 'value' || dataKeys[0]}
+              nameKey={chart.nameKey || 'category' || 'name'}
               cx="50%"
               cy="50%"
               outerRadius={100}
-              label
+              label={renderPieLabel}
             >
               {chartData.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
+                  fill={entry.color || COLORS[index % COLORS.length]}
                 />
               ))}
             </Pie>
