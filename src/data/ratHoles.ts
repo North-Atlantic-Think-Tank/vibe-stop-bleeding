@@ -97,13 +97,13 @@ export const ratHoles: RatHole[] = [
   },
   {
     id: 'ukraine-aid-2024',
-    title: 'Ukraine Financial Aid Package',
-    amount: 4800000000,
+    title: 'Ukraine Financial and Military Aid Package',
+    amount: 22000000000,
     abstract:
-      'Multi-billion dollar aid package to Ukraine including military equipment, humanitarian assistance, and budget support with limited oversight on fund allocation.',
+      'Comprehensive multi-year aid package to Ukraine totaling nearly $22 billion since 2022, including military equipment, humanitarian assistance, budget support, and NATO commitments. Latest announcement in December 2025 includes $235M ($200M for NATO PURL military capabilities and $35M for NATO Comprehensive Assistance Package) with limited oversight on fund allocation and project tracking.',
     entity: 'Government of Ukraine',
     category: 'foreign-aid',
-    date: '2024-02-10',
+    date: '2025-12-03',
     stakeholders: [
       {
         name: 'Justin Trudeau',
@@ -111,20 +111,43 @@ export const ratHoles: RatHole[] = [
         link: 'https://pm.gc.ca',
       },
       {
-        name: 'Mélanie Joly',
+        name: 'David McGuinty',
+        role: 'Minister of National Defence',
+        link: 'https://www.canada.ca/en/department-national-defence.html',
+      },
+      {
+        name: 'Anita Anand',
         role: 'Minister of Foreign Affairs',
         link: 'https://www.canada.ca/en/global-affairs.html',
       },
     ],
     sources: [
       {
-        title: 'Canada announces additional Ukraine support',
-        link: 'https://example.com/ukraine-aid',
-        date: '2024-02-10',
+        title: 'Canada pledges more than $200M in funding for Ukraine at NATO meeting',
+        link: 'https://www.cbc.ca/news/politics/anand-mcguinty-nato-ukraine-9.7001195',
+        date: '2025-12-03',
+        publisher: 'CBC News',
+      },
+      {
+        title: 'Ottawa pledges another $235M to Ukraine as Freeland pushes more investment',
+        link: 'https://globalnews.ca/news/11557638/ukraine-canada-aid-funding-nato-december/',
+        date: '2025-12-03',
         publisher: 'Global News',
       },
+      {
+        title: 'Minister Anand announces additional support for Ukraine',
+        link: 'https://www.canada.ca/en/global-affairs/news/2025/12/minister-anand-announces-additional-support-for-ukraine.html',
+        date: '2025-12-03',
+        publisher: 'Canada.ca',
+      },
+      {
+        title: 'Defence Minister McGuinty announces new critical military equipment funding for Ukraine',
+        link: 'https://www.canada.ca/en/department-national-defence/news/2025/12/defence-minister-mcguinty-announces-new-critical-military-equipment-funding-for-ukraine.html',
+        date: '2025-12-03',
+        publisher: 'Canada.ca',
+      },
     ],
-    tags: ['foreign-aid', 'military', 'international'],
+    tags: ['foreign-aid', 'military', 'international', 'nato'],
     status: 'ongoing',
   },
   {
