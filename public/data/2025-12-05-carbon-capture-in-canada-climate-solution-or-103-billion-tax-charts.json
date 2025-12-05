@@ -1,0 +1,113 @@
+[
+  {
+    "type": "bar",
+    "title": "Cost Per Tonne CO₂: Carbon Capture vs. Alternatives (CAD)",
+    "data": [
+      {
+        "technology": "Methane Reduction",
+        "cost": 17
+      },
+      {
+        "technology": "Solar Power",
+        "cost": 28
+      },
+      {
+        "technology": "Wind Power",
+        "cost": 28
+      },
+      {
+        "technology": "CCS (Low Concentration)",
+        "cost": 50
+      },
+      {
+        "technology": "CCS (High Concentration)",
+        "cost": 150
+      },
+      {
+        "technology": "CCS Oil & Gas (Actual)",
+        "cost": 200
+      }
+    ],
+    "config": {
+      "xAxis": "technology",
+      "yAxis": "cost",
+      "color": "#2563eb",
+      "label": "Cost per tonne CO₂ avoided/captured"
+    }
+  },
+  {
+    "type": "line",
+    "title": "Federal CCUS Tax Credit: Projected Costs (Billions CAD)",
+    "data": [
+      {
+        "year": "2023",
+        "estimate": 4.8
+      },
+      {
+        "year": "2024",
+        "estimate": 5.7
+      },
+      {
+        "year": "2027",
+        "estimate": 5.7
+      },
+      {
+        "year": "2030",
+        "estimate": 9.1
+      },
+      {
+        "year": "2035",
+        "estimate": 12.5
+      },
+      {
+        "year": "2041",
+        "estimate": 16
+      }
+    ],
+    "config": {
+      "xAxis": "year",
+      "yAxis": "estimate",
+      "color": "#dc2626",
+      "label": "Projected cumulative cost"
+    }
+  },
+  {
+    "type": "pie",
+    "title": "Shell Quest Facility: Emissions vs. Capture (2015-2019)",
+    "data": [
+      {
+        "category": "Emissions Generated",
+        "value": 7.5,
+        "color": "#ef4444"
+      },
+      {
+        "category": "CO₂ Captured",
+        "value": 5,
+        "color": "#22c55e"
+      }
+    ],
+    "config": {
+      "label": "Million tonnes CO₂"
+    }
+  },
+  {
+    "type": "bar",
+    "title": "Current Carbon Capture Impact in Canada",
+    "data": [
+      {
+        "metric": "Canada's Annual Emissions",
+        "value": 100
+      },
+      {
+        "metric": "Captured by 8 CCS Facilities",
+        "value": 0.5
+      }
+    ],
+    "config": {
+      "xAxis": "metric",
+      "yAxis": "value",
+      "color": "#8b5cf6",
+      "label": "Percentage"
+    }
+  }
+]

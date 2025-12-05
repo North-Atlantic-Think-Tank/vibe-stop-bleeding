@@ -147,12 +147,7 @@ This will:
 3. Write full article with data
 4. Save as JSON in `content/articles/`
 
-#### Publish article:
-```bash
-npm run workflow:publish -- content/articles/2025-11-14-article.json
-```
-
-Converts JSON to markdown and prepares for web publishing.
+> After one article wrote down, do two things below:
 
 #### Generate cover images and thumbnails:
 ```bash
@@ -167,6 +162,14 @@ npm run workflow:covergen -- content/articles/2025-11-14-article.json --style=mo
 npm run workflow:covergen -- content/articles/2025-11-14-article.json --style=aggressive
 npm run workflow:covergen -- content/articles/2025-11-14-article.json --style=satirical
 ```
+
+#### Publish article with cover & thumbnails generation:
+```bash
+npm run publish -- content/articles/2025-11-14-article.json
+```
+
+Converts JSON to markdown and prepares for web publishing.
+
 
 This will:
 1. Generate AI-powered cover images using Stability AI in requested style(s)

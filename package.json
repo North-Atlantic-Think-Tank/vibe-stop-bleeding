@@ -14,11 +14,11 @@
     "journalist:investigate": "node agents/journalist/investigate.js",
     "intl:investigate": "node agents/intljournalist/investigate.js",
     "developer:push-docs": "node agents/developer/push-docs.js",
-    "publish": "npm run developer:push-docs",
     "workflow:daily": "node agents/workflow/daily-cycle.js",
     "workflow:publish": "node agents/workflow/publish.js",
     "workflow:commentary": "node agents/workflow/commentary.js",
     "workflow:covergen": "node agents/workflow/covergen.js",
+    "publish": "node agents/workflow/complete-publish.js",
     "thumbnails:generate": "node scripts/generate-thumbnails.js"
   },
   "dependencies": {

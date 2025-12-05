@@ -24,6 +24,10 @@ export interface ChartData {
   dataKey?: string;
   nameKey?: string;
   description?: string;
+  config?: {
+    label?: string;
+    [key: string]: any;
+  };
 }
 
 interface ChartProps {
@@ -134,21 +138,28 @@ export default function Chart({ chart }: ChartProps) {
         );
 
       case 'pie':
+        // Custom label renderer that includes the unit from config.label
+        const renderPieLabel = (entry: any) => {
+          const unit = chart.config?.label || '';
+          const percentage = entry.percent ? `(${(entry.percent * 100).toFixed(1)}%)` : '';
+          return `${entry.value} ${unit} ${percentage}`.trim();
+        };
+
         return (
           <PieChart>
             <Pie
               data={chartData}
-              dataKey={chart.dataKey || dataKeys[0] || 'value'}
-              nameKey={chart.nameKey || 'name'}
+              dataKey={chart.dataKey || 'value' || dataKeys[0]}
+              nameKey={chart.nameKey || 'category' || 'name'}
               cx="50%"
               cy="50%"
               outerRadius={100}
-              label
+              label={renderPieLabel}
             >
               {chartData.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
+                  fill={entry.color || COLORS[index % COLORS.length]}
                 />
               ))}
             </Pie>

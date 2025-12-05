@@ -20,6 +20,7 @@ category: ${articleData.category || 'general'}
 author: ${articleData.author || 'stopbleeding.ca Editorial Team'}
 tags: [${(articleData.tags || []).map((t) => `"${t}"`).join(', ')}]
 description: "${articleData.seo?.metaDescription || articleData.summary || ''}"
+ogImage: "${articleData.seo?.ogImage || ''}"
 ---
 
 `;
