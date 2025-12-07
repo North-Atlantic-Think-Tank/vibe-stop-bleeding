@@ -1,6 +1,6 @@
 {
   "name": "stopbleeding-ca",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "AI-powered Canadian news analysis platform",
   "type": "module",
   "scripts": {
@@ -18,7 +18,7 @@
     "workflow:publish": "node agents/workflow/publish.js",
     "workflow:commentary": "node agents/workflow/commentary.js",
     "workflow:covergen": "node agents/workflow/covergen.js",
-    "publish": "node agents/workflow/complete-publish.js",
+    "publish": "node agents/workflow/easy-publish.js",
     "thumbnails:generate": "node scripts/generate-thumbnails.js"
   },
   "dependencies": {

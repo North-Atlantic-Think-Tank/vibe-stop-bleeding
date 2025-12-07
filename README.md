@@ -163,9 +163,16 @@ npm run workflow:covergen -- content/articles/2025-11-14-article.json --style=ag
 npm run workflow:covergen -- content/articles/2025-11-14-article.json --style=satirical
 ```
 
-#### Publish article with cover & thumbnails generation:
+#### Publish one article with cover & thumbnails generation:
 ```bash
 npm run publish -- content/articles/2025-11-14-article.json
+```
+
+
+#### Publish article by manual selection:(2025/12/07)
+Alternatively use a more convenient way(arrow selection manually):
+```bash
+npm run publish
 ```
 
 Converts JSON to markdown and prepares for web publishing.
