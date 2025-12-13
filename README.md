@@ -1,5 +1,7 @@
 # stopbleeding.ca - AI Agent Team
 
+Created@November 14th, 2025
+
 An AI-powered Canadian news analysis platform using autonomous agents for content creation and website management.
 
 ## 🤖 Agent Team Structure

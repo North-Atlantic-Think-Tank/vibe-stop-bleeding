@@ -153,6 +153,9 @@ Structure your findings as follows:
 {
   "investigation_id": "INV-2025-001",
   "title": "Investigation Title",
+  "category": "politics|economy|employment|education|general",
+  "date": "2025-11-14",
+  "content": "Full article content in markdown format (800-1500 words)",
   "trigger": "What initiated this investigation",
   "status": "active|completed|monitoring",
   "priority": "high|medium|low",

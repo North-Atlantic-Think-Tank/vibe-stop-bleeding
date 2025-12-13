@@ -1,6 +1,7 @@
 import rss from '@astrojs/rss';
 import { readdir, readFile } from 'fs/promises';
 import { join } from 'path';
+import { normalizeArticle } from '../utils/article-normalizer.ts';
 
 async function getArticles() {
   try {
@@ -13,7 +14,10 @@ async function getArticles() {
         .map(async (file) => {
           const filePath = join(articlesDir, file);
           const content = await readFile(filePath, 'utf-8');
-          const article = JSON.parse(content);
+          const rawArticle = JSON.parse(content);
+
+          // Normalize article schema for investigation articles
+          const article = normalizeArticle(rawArticle);
 
           return {
             ...article,

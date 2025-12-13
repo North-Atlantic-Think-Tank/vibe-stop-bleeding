@@ -5,6 +5,7 @@ import Footer from '../../components/Footer.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
 import { readdir, readFile } from 'fs/promises';
 import { join } from 'path';
+import { normalizeArticle } from '../../utils/article-normalizer';
 
 export async function getStaticPaths() {
   const categories = ['politics', 'economy', 'employment', 'education', 'international', 'general'];
@@ -28,7 +29,10 @@ async function getArticlesByCategory(categoryFilter: string) {
         .map(async (file) => {
           const filePath = join(articlesDir, file);
           const content = await readFile(filePath, 'utf-8');
-          const article = JSON.parse(content);
+          const rawArticle = JSON.parse(content);
+
+          // Normalize the article schema
+          const article = normalizeArticle(rawArticle);
 
           const excerpt = article.content
             ? article.content.split('\n\n')[0].substring(0, 200) + '...'
@@ -45,7 +49,7 @@ async function getArticlesByCategory(categoryFilter: string) {
 
     // Filter by category and sort by date
     return articles
-      .filter(article => article.category.toLowerCase() === categoryFilter.toLowerCase())
+      .filter(article => article.category && article.category.toLowerCase() === categoryFilter.toLowerCase())
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   } catch (error) {
     console.error('Error loading articles:', error);

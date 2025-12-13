@@ -19,7 +19,7 @@ const categoryColors: Record<string, string> = {
   general: 'bg-gray-600'
 };
 
-const bgColor = categoryColors[category.toLowerCase()] || categoryColors.general;
+const bgColor = category ? (categoryColors[category.toLowerCase()] || categoryColors.general) : categoryColors.general;
 
 const formattedDate = new Date(date).toLocaleDateString('en-CA', {
   year: 'numeric',

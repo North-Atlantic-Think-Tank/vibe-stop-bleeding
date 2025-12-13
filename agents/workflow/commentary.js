@@ -3,11 +3,149 @@ import 'dotenv/config';
 import Anthropic from '@anthropic-ai/sdk';
 import fs from 'fs/promises';
 import path from 'path';
+import readline from 'readline';
 import { publishArticle } from './publish.js';
+
+const ARTICLES_DIR = path.join(process.cwd(), 'content/articles');
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
+
+/**
+ * Get all JSON files from content/articles sorted by creation time (newest first)
+ */
+async function getArticleJsonFiles() {
+  const files = await fs.readdir(ARTICLES_DIR);
+  const jsonFiles = files.filter((f) => f.endsWith('.json'));
+
+  // Get file stats and sort by birthtime (creation time) descending
+  const filesWithStats = await Promise.all(
+    jsonFiles.map(async (filename) => {
+      const filepath = path.join(ARTICLES_DIR, filename);
+      const stats = await fs.stat(filepath);
+      return {
+        filename,
+        filepath,
+        birthtime: stats.birthtime,
+      };
+    }),
+  );
+
+  return filesWithStats.sort((a, b) => b.birthtime - a.birthtime);
+}
+
+/**
+ * Interactive file selector with arrow key navigation
+ */
+async function selectArticleFile() {
+  const files = await getArticleJsonFiles();
+
+  if (files.length === 0) {
+    console.error('\n❌ No JSON files found in content/articles/\n');
+    process.exit(1);
+  }
+
+  return new Promise((resolve) => {
+    let selectedIndex = 0;
+    // 5 rows at most in one page
+    const maxVisible = Math.min(5, files.length);
+
+    const renderList = () => {
+      // Clear previous render
+      process.stdout.write('\x1B[2J\x1B[0f');
+
+      console.log('📰 Select an investigation article for commentary:\n');
+      console.log(
+        '   Use ↑/↓ arrow keys to navigate, Enter to confirm, q to quit\n',
+      );
+      console.log('-'.repeat(70));
+
+      // Calculate visible window
+      let startIndex = 0;
+      if (selectedIndex >= maxVisible) {
+        startIndex = selectedIndex - maxVisible + 1;
+      }
+      const endIndex = Math.min(startIndex + maxVisible, files.length);
+
+      // Show scroll indicator if needed
+      if (startIndex > 0) {
+        console.log('   ↑ more files above...');
+      }
+
+      for (let i = startIndex; i < endIndex; i++) {
+        const file = files[i];
+        const isSelected = i === selectedIndex;
+        const prefix = isSelected ? ' ▶ ' : '   ';
+        const date = file.birthtime.toLocaleDateString('en-CA');
+        const time = file.birthtime.toLocaleTimeString('en-CA', {
+          hour: '2-digit',
+          minute: '2-digit',
+        });
+
+        const line = `${prefix}${file.filename}`;
+        const meta = `[${date} ${time}]`;
+
+        if (isSelected) {
+          // Highlight selected item
+          console.log(`\x1B[36m${line}\x1B[0m`);
+          console.log(`\x1B[90m      ${meta}\x1B[0m`);
+        } else {
+          console.log(line);
+          console.log(`\x1B[90m      ${meta}\x1B[0m`);
+        }
+      }
+
+      // Show scroll indicator if needed
+      if (endIndex < files.length) {
+        console.log('   ↓ more files below...');
+      }
+
+      console.log('-'.repeat(70));
+      console.log(
+        `\n   Total: ${files.length} files | Selected: ${selectedIndex + 1}/${files.length}`,
+      );
+    };
+
+    // Initial render
+    renderList();
+
+    // Set up raw mode for key input
+    readline.emitKeypressEvents(process.stdin);
+    if (process.stdin.isTTY) {
+      process.stdin.setRawMode(true);
+    }
+
+    const handleKeypress = (str, key) => {
+      if (key.name === 'up') {
+        selectedIndex = Math.max(0, selectedIndex - 1);
+        renderList();
+      } else if (key.name === 'down') {
+        selectedIndex = Math.min(files.length - 1, selectedIndex + 1);
+        renderList();
+      } else if (key.name === 'return') {
+        cleanup();
+        console.log(`\n✅ Selected: ${files[selectedIndex].filename}\n`);
+        resolve(files[selectedIndex].filepath);
+      } else if (key.name === 'q' || (key.ctrl && key.name === 'c')) {
+        cleanup();
+        console.log('\n❌ Selection cancelled\n');
+        process.exit(0);
+      }
+    };
+
+    const cleanup = () => {
+      process.stdin.removeListener('keypress', handleKeypress);
+      if (process.stdin.isTTY) {
+        process.stdin.setRawMode(false);
+      }
+      process.stdin.pause();
+    };
+
+    process.stdin.on('keypress', handleKeypress);
+    process.stdin.resume();
+  });
+}
 
 /**
  * Commentary Workflow
@@ -176,16 +314,27 @@ Output the commentary in JSON format matching the article schema:
   }
 }
 
+export { writeCommentary, selectArticleFile };
+
 // CLI execution
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const investigationPath = process.argv[2];
-  if (!investigationPath) {
-    console.error('Usage: npm run workflow:commentary -- path/to/investigation.json');
-    console.error('\nExample:');
-    console.error('  npm run workflow:commentary -- content/articles/2025-11-23-carney-paradox-rhetoric-reality-gap.json');
-    process.exit(1);
-  }
-  writeCommentary(investigationPath).catch(console.error);
-}
+  let investigationPath = process.argv[2];
 
-export { writeCommentary };
+  // If no path provided, show interactive selector
+  if (!investigationPath) {
+    investigationPath = await selectArticleFile();
+  } else {
+    // Check if provided file exists
+    try {
+      await fs.access(investigationPath);
+    } catch {
+      console.error(`\n❌ Error: File not found: ${investigationPath}\n`);
+      process.exit(1);
+    }
+  }
+
+  writeCommentary(investigationPath).catch((error) => {
+    console.error(`\n❌ Fatal error: ${error.message}\n`);
+    process.exit(1);
+  });
+}
