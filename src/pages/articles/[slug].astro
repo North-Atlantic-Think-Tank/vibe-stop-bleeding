@@ -9,6 +9,7 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import Chart from '../../components/charts/Chart';
 import LazyImage from '../../components/LazyImage';
+import { normalizeArticle } from '../../utils/article-normalizer';
 
 export async function getStaticPaths() {
   try {
@@ -33,7 +34,8 @@ async function getArticle(slug: string) {
   try {
     const filePath = join(process.cwd(), 'content/articles', `${slug}.json`);
     const content = await readFile(filePath, 'utf-8');
-    return JSON.parse(content);
+    const rawArticle = JSON.parse(content);
+    return normalizeArticle(rawArticle);
   } catch (error) {
     console.error('Error loading article:', error);
     return null;

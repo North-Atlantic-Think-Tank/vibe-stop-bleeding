@@ -1,6 +1,8 @@
 # stopbleeding.ca Website
 
-Canadian news analysis platform built with Astro, React, and Tailwind CSS.
+Created@November 14th, 2025
+
+An AI-powered Canadian news analysis platform using autonomous agents for content creation and website management.
 
 ## 🚀 Quick Start
 

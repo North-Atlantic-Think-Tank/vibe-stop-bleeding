@@ -1,0 +1,108 @@
+[
+  {
+    "type": "comparison",
+    "title": "MOU vs Conservative Motion: Near-Identical Language",
+    "description": "Side-by-side comparison showing the striking similarity between what Carney signed and what he voted against",
+    "data": [
+      {
+        "element": "Pipeline Capacity",
+        "mou": "At least one million low-emissions barrels per day",
+        "motion": "At least one million barrels a day of low-emission Alberta bitumen"
+      },
+      {
+        "element": "Destination",
+        "mou": "To Asian markets",
+        "motion": "To Asia markets"
+      },
+      {
+        "element": "Route",
+        "mou": "To British Columbia's coast",
+        "motion": "From a strategic deep-water port on the British Columbia coast"
+      },
+      {
+        "element": "Tanker Moratorium",
+        "mou": "Amend if necessary",
+        "motion": "Adjustment while respecting duty to consult"
+      }
+    ]
+  },
+  {
+    "type": "bar",
+    "title": "House of Commons Vote on Pipeline Motion",
+    "description": "December 9, 2025 vote breakdown showing motion defeated 196-139",
+    "data": [
+      {
+        "party": "Conservative (For)",
+        "votes": 139
+      },
+      {
+        "party": "Liberal (Against)",
+        "votes": 150
+      },
+      {
+        "party": "NDP (Against)",
+        "votes": 25
+      },
+      {
+        "party": "Bloc (Against)",
+        "votes": 21
+      }
+    ]
+  },
+  {
+    "type": "timeline",
+    "title": "The 12-Day Pipeline Paradox",
+    "data": [
+      {
+        "date": "Nov 27",
+        "event": "Carney signs Alberta MOU supporting pipeline"
+      },
+      {
+        "date": "Nov 27",
+        "event": "Environment Minister Guilbeault resigns in protest"
+      },
+      {
+        "date": "Dec 5",
+        "event": "Conservatives announce pipeline motion"
+      },
+      {
+        "date": "Dec 9",
+        "event": "Motion debated, amended, defeated 196-139"
+      },
+      {
+        "date": "Dec 12",
+        "event": "Investigation published"
+      }
+    ]
+  },
+  {
+    "type": "network",
+    "title": "Carney-Brookfield Financial Connections",
+    "description": "Financial ties between PM and carbon capture investments",
+    "data": {
+      "center": "Mark Carney",
+      "connections": [
+        {
+          "entity": "Brookfield Asset Management",
+          "relationship": "Former Chair",
+          "value": "$6.8M+ stock options"
+        },
+        {
+          "entity": "Brookfield Transition Fund",
+          "relationship": "Carried interest",
+          "value": "Tens of millions potential"
+        },
+        {
+          "entity": "Entropy Inc.",
+          "relationship": "Brookfield investment",
+          "value": "$300M carbon capture"
+        },
+        {
+          "entity": "Pathways Plus",
+          "relationship": "MOU requirement",
+          "value": "$16.5B project"
+        }
+      ]
+    }
+  }
+]
