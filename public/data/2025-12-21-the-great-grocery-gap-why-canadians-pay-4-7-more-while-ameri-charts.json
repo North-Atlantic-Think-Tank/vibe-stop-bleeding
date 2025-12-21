@@ -1,0 +1,68 @@
+[
+  {
+    "type": "bar",
+    "title": "G7 Food Inflation Comparison (Late 2025)",
+    "data": {
+      "labels": [
+        "Japan",
+        "UK",
+        "Canada",
+        "Italy",
+        "USA",
+        "Germany",
+        "France"
+      ],
+      "values": [
+        7.2,
+        5.1,
+        4.7,
+        3.7,
+        3.2,
+        2.9,
+        1.7
+      ],
+      "unit": "percent"
+    }
+  },
+  {
+    "type": "comparison",
+    "title": "Canada vs USA: Grocery Market Structure",
+    "data": {
+      "categories": [
+        "Market Concentration",
+        "Import Dependency",
+        "Discount Competition",
+        "Currency Strength"
+      ],
+      "canada": [
+        "75% (4 firms)",
+        "60% produce",
+        "Weak",
+        "Weak"
+      ],
+      "usa": [
+        "Fragmented",
+        "20% food",
+        "Strong",
+        "Strong"
+      ]
+    }
+  },
+  {
+    "type": "line",
+    "title": "Canadian Family Food Spending Trajectory",
+    "data": {
+      "years": [
+        "2024",
+        "2025",
+        "2026 (projected)"
+      ],
+      "values": [
+        16032,
+        16834,
+        17572
+      ],
+      "unit": "CAD"
+    }
+  }
+]

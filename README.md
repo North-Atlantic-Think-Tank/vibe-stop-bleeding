@@ -90,6 +90,12 @@ cp .env.example .env
 # - STABILITY_API_BASE_URL (optional, defaults to Stability AI endpoint)
 ```
 
+### Website Preview in Local
+
+```bash
+npm run dev
+```
+
 ## 📖 Usage
 
 ### Editor Agent Tasks
@@ -172,6 +178,9 @@ npm run publish -- content/articles/2025-11-14-article.json
 
 
 #### Publish article by manual selection:(2025/12/07)
+
+> THIS IS MOST COMMONLY USED COMMAND TO PUBLISH AN ARTICLE!
+
 Alternatively use a more convenient way(arrow selection manually):
 ```bash
 npm run publish
