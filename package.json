@@ -18,8 +18,7 @@
     "workflow:publish": "node agents/workflow/publish.js",
     "workflow:commentary": "node agents/workflow/commentary.js",
     "workflow:covergen": "node agents/workflow/covergen.js",
-    "publish": "node agents/workflow/easy-publish.js",
-    "thumbnails:generate": "node scripts/generate-thumbnails.js"
+    "publish": "node agents/workflow/easy-publish.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.0",

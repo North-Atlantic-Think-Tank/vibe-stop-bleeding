@@ -1,0 +1,60 @@
+[
+  {
+    "type": "comparison",
+    "title": "Liberal Bills 2025: Powers vs. Safeguards",
+    "data": {
+      "labels": [
+        "C-2 Border",
+        "C-3 Citizenship",
+        "C-8 Cyber",
+        "C-9 Hate"
+      ],
+      "government_powers": [
+        9,
+        4,
+        8,
+        7
+      ],
+      "civil_liberties_safeguards": [
+        2,
+        6,
+        3,
+        2
+      ]
+    }
+  },
+  {
+    "type": "timeline",
+    "title": "2025 Liberal Legislative Agenda",
+    "data": [
+      {
+        "date": "2025-06-03",
+        "event": "Bill C-2 introduced"
+      },
+      {
+        "date": "2025-06-05",
+        "event": "Bill C-3 introduced"
+      },
+      {
+        "date": "2025-06-18",
+        "event": "Bill C-8 introduced"
+      },
+      {
+        "date": "2025-09",
+        "event": "Bill C-9 introduced"
+      },
+      {
+        "date": "2025-10-08",
+        "event": "Some C-2 provisions withdrawn"
+      },
+      {
+        "date": "2025-11-20",
+        "event": "Bill C-3 receives Royal Assent"
+      },
+      {
+        "date": "2025-12-09",
+        "event": "Religious exemption removed from C-9"
+      }
+    ]
+  }
+]
