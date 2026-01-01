@@ -98,15 +98,15 @@ export const ratHoles: RatHole[] = [
   {
     id: 'ukraine-aid-2024',
     title: 'Ukraine Financial and Military Aid Package',
-    amount: 22000000000,
+    amount: 24500000000,
     abstract:
-      'Comprehensive multi-year aid package to Ukraine totaling nearly $22 billion since 2022, including military equipment, humanitarian assistance, budget support, and NATO commitments. Latest announcement in December 2025 includes $235M ($200M for NATO PURL military capabilities and $35M for NATO Comprehensive Assistance Package) with limited oversight on fund allocation and project tracking.',
+      'Comprehensive multi-year aid package to Ukraine totaling $24.5 billion since 2022, including military equipment, humanitarian assistance, budget support, and NATO commitments. Latest announcement on December 27, 2025 by PM Mark Carney includes an additional $2.5 billion in economic assistance (IMF financing, debt service suspension, World Bank and EBRD loan guarantees), with limited oversight on fund allocation and project tracking.',
     entity: 'Government of Ukraine',
     category: 'foreign-aid',
-    date: '2025-12-03',
+    date: '2025-12-27',
     stakeholders: [
       {
-        name: 'Justin Trudeau',
+        name: 'Mark Carney',
         role: 'Prime Minister',
         link: 'https://pm.gc.ca',
       },
