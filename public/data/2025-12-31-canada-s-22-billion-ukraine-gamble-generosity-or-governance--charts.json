@@ -1,0 +1,92 @@
+[
+  {
+    "type": "bar",
+    "title": "Canada's Ukraine Aid Since 2022 ($ Billions)",
+    "data": [
+      {
+        "category": "Military Assistance",
+        "value": 6.5
+      },
+      {
+        "category": "Financial Assistance",
+        "value": 14.4
+      },
+      {
+        "category": "Humanitarian Aid",
+        "value": 0.4
+      },
+      {
+        "category": "Development & Reconstruction",
+        "value": 0.7
+      },
+      {
+        "category": "Latest (Dec 2025)",
+        "value": 2.5
+      }
+    ],
+    "config": {
+      "xAxisLabel": "Aid Category",
+      "yAxisLabel": "$ Billions CAD"
+    }
+  },
+  {
+    "type": "line",
+    "title": "Federal Deficit Trajectory ($ Billions)",
+    "data": [
+      {
+        "year": "2022-23",
+        "deficit": 35.3
+      },
+      {
+        "year": "2023-24",
+        "deficit": 61.9
+      },
+      {
+        "year": "2024-25",
+        "deficit": 36.3
+      },
+      {
+        "year": "2025-26",
+        "deficit": 78.3
+      },
+      {
+        "year": "2026-27 (proj)",
+        "deficit": 65
+      },
+      {
+        "year": "2029-30 (proj)",
+        "deficit": 57
+      }
+    ],
+    "config": {
+      "xAxisLabel": "Fiscal Year",
+      "yAxisLabel": "$ Billions CAD"
+    }
+  },
+  {
+    "type": "bar",
+    "title": "Healthcare Crisis Indicators",
+    "data": [
+      {
+        "metric": "Waitlist Deaths (2024-25)",
+        "value": 23746
+      },
+      {
+        "metric": "Canadians Without Doctor (millions)",
+        "value": 6.5
+      },
+      {
+        "metric": "Family Doctor Shortage",
+        "value": 22823
+      },
+      {
+        "metric": "Average Wait Time (weeks)",
+        "value": 30
+      }
+    ],
+    "config": {
+      "xAxisLabel": "Metric",
+      "yAxisLabel": "Value"
+    }
+  }
+]
