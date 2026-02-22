@@ -1,0 +1,104 @@
+[
+  {
+    "type": "line",
+    "title": "Canada Crime Severity Index (2020-2024)",
+    "data": [
+      {
+        "year": 2020,
+        "overall_csi": 73.9,
+        "violent_csi": 88
+      },
+      {
+        "year": 2021,
+        "overall_csi": 73.7,
+        "violent_csi": 93.3
+      },
+      {
+        "year": 2022,
+        "overall_csi": 78.1,
+        "violent_csi": 98
+      },
+      {
+        "year": 2023,
+        "overall_csi": 80.5,
+        "violent_csi": 99.7
+      },
+      {
+        "year": 2024,
+        "overall_csi": 77.3,
+        "violent_csi": 98.7
+      }
+    ]
+  },
+  {
+    "type": "bar",
+    "title": "Healthcare Wait Times - Median Weeks (1993 vs 2023 vs 2024)",
+    "data": [
+      {
+        "year": "1993",
+        "weeks": 9.3
+      },
+      {
+        "year": "2023",
+        "weeks": 27.7
+      },
+      {
+        "year": "2024",
+        "weeks": 30
+      }
+    ]
+  },
+  {
+    "type": "bar",
+    "title": "Canadian Trust in Institutions (2025 Edelman Trust Barometer)",
+    "data": [
+      {
+        "metric": "Government leaders mislead public",
+        "percent": 67
+      },
+      {
+        "metric": "High sense of grievance",
+        "percent": 62
+      },
+      {
+        "metric": "Next generation will be worse off",
+        "percent": 64
+      },
+      {
+        "metric": "Trust index (vs 56 global avg)",
+        "value": 53
+      }
+    ]
+  },
+  {
+    "type": "line",
+    "title": "Immigration vs Housing: Population Growth and Home Prices",
+    "data": [
+      {
+        "year": 2020,
+        "population_growth_pct": 0.4,
+        "avg_home_price": 568000
+      },
+      {
+        "year": 2021,
+        "population_growth_pct": 0.5,
+        "avg_home_price": 713000
+      },
+      {
+        "year": 2022,
+        "population_growth_pct": 2.7,
+        "avg_home_price": 704000
+      },
+      {
+        "year": 2023,
+        "population_growth_pct": 3.2,
+        "avg_home_price": 678000
+      },
+      {
+        "year": 2024,
+        "population_growth_pct": 1.8,
+        "avg_home_price": 707000
+      }
+    ]
+  }
+]
