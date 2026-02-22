@@ -51,7 +51,7 @@ Be thorough, evidence-based, and ensure all claims are defensible. Include speci
   console.log('⏳ This may take a few minutes for thorough research...\n');
 
   const message = await anthropic.messages.create({
-    model: 'claude-sonnet-4-5-20250929',
+    model: 'claude-sonnet-4-6',
     max_tokens: 16000,
     system: journalistPrompt,
     messages: [

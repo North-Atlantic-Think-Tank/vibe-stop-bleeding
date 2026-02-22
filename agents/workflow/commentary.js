@@ -222,7 +222,7 @@ Output the commentary in JSON format matching the article schema:
     console.log('✍️  Generating editorial commentary...\n');
 
     const message = await anthropic.messages.create({
-      model: 'claude-sonnet-4-5-20250929',
+      model: 'claude-sonnet-4-6',
       max_tokens: 8000,
       system: editorPrompt,
       messages: [

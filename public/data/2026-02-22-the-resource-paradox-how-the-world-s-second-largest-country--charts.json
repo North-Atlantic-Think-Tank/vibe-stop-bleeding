@@ -1,0 +1,148 @@
+[
+  {
+    "type": "bar",
+    "title": "GDP Per Capita: Canadian Provinces vs Alabama (2024, USD PPP)",
+    "data": [
+      {
+        "jurisdiction": "Alberta",
+        "gdp_per_capita": 97000,
+        "country": "Canada"
+      },
+      {
+        "jurisdiction": "Saskatchewan",
+        "gdp_per_capita": 78000,
+        "country": "Canada"
+      },
+      {
+        "jurisdiction": "Alabama",
+        "gdp_per_capita": 48988,
+        "country": "US"
+      },
+      {
+        "jurisdiction": "Ontario",
+        "gdp_per_capita": 65000,
+        "country": "Canada"
+      },
+      {
+        "jurisdiction": "British Columbia",
+        "gdp_per_capita": 62000,
+        "country": "Canada"
+      },
+      {
+        "jurisdiction": "Quebec",
+        "gdp_per_capita": 60100,
+        "country": "Canada"
+      },
+      {
+        "jurisdiction": "Manitoba",
+        "gdp_per_capita": 56500,
+        "country": "Canada"
+      },
+      {
+        "jurisdiction": "New Brunswick",
+        "gdp_per_capita": 48000,
+        "country": "Canada"
+      },
+      {
+        "jurisdiction": "Nova Scotia",
+        "gdp_per_capita": 49000,
+        "country": "Canada"
+      },
+      {
+        "jurisdiction": "PEI",
+        "gdp_per_capita": 47000,
+        "country": "Canada"
+      }
+    ]
+  },
+  {
+    "type": "line",
+    "title": "Canada GDP Per Capita as Percentage of US Level (1981-2024)",
+    "data": [
+      {
+        "year": 1981,
+        "pct_of_us": 94
+      },
+      {
+        "year": 1990,
+        "pct_of_us": 87
+      },
+      {
+        "year": 2000,
+        "pct_of_us": 82
+      },
+      {
+        "year": 2010,
+        "pct_of_us": 84
+      },
+      {
+        "year": 2015,
+        "pct_of_us": 76
+      },
+      {
+        "year": 2020,
+        "pct_of_us": 75
+      },
+      {
+        "year": 2023,
+        "pct_of_us": 78
+      },
+      {
+        "year": 2024,
+        "pct_of_us": 72
+      }
+    ]
+  },
+  {
+    "type": "bar",
+    "title": "Canada vs Alabama: Living Standards Comparison",
+    "data": [
+      {
+        "metric": "Life Expectancy (years)",
+        "canada": 81.7,
+        "alabama": 73.2
+      },
+      {
+        "metric": "Poverty Rate (%)",
+        "canada": 7.4,
+        "alabama": 14.8
+      },
+      {
+        "metric": "Infant Mortality (per 1000)",
+        "canada": 4.3,
+        "alabama": 7
+      },
+      {
+        "metric": "Homicide Rate (per 100K)",
+        "canada": 2.2,
+        "alabama": 10.1
+      }
+    ]
+  },
+  {
+    "type": "bar",
+    "title": "Cancelled Canadian Resource Projects Since 2015 (Selected, Billions CAD)",
+    "data": [
+      {
+        "project": "Pacific NorthWest LNG",
+        "value": 36
+      },
+      {
+        "project": "Energie Saguenay LNG",
+        "value": 20
+      },
+      {
+        "project": "Energy East Pipeline",
+        "value": 15.7
+      },
+      {
+        "project": "Northern Gateway",
+        "value": 7.9
+      },
+      {
+        "project": "Other Projects (est.)",
+        "value": 590
+      }
+    ]
+  }
+]

@@ -94,7 +94,7 @@ const prompt = await fs.readFile('agents/[agent]/prompt.md', 'utf-8');
 
 // 2. Call Claude API
 const message = await anthropic.messages.create({
-  model: 'claude-sonnet-4-5-20250929',
+  model: 'claude-sonnet-4-6',
   max_tokens: 4000-8000,
   system: prompt,
   messages: [{ role: 'user', content: task }]
@@ -198,7 +198,7 @@ Use cron or cloud scheduler (Vercel Cron, GitHub Actions) to trigger `npm run wo
 
 **API Key Required**: All agent scripts require `ANTHROPIC_API_KEY` in `.env`
 
-**Model Selection**: Currently using `claude-sonnet-4-5-20250929`. To change models, update in each agent script.
+**Model Selection**: Currently using `claude-sonnet-4-6`. To change models, update in each agent script.
 
 **Token Limits**:
 - Research tasks: 4000 tokens
