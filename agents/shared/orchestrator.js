@@ -16,6 +16,7 @@ class AgentOrchestrator {
       editor: null,
       developer: null,
       workflow: null,
+      'chief-executive': null,
     };
   }
 
@@ -30,6 +31,10 @@ class AgentOrchestrator {
     );
     this.agents.workflow = await fs.readFile(
       path.join(process.cwd(), 'agents/workflow/prompt.md'),
+      'utf-8'
+    );
+    this.agents['chief-executive'] = await fs.readFile(
+      path.join(process.cwd(), 'agents/chief-executive/prompt.md'),
       'utf-8'
     );
   }
@@ -110,6 +115,22 @@ class AgentOrchestrator {
           results.agents
         );
         results.agents.developer = { phase: 'execution', output: developerOutput };
+      }
+
+      // Phase 4: Determine if Chief Executive is needed
+      if (taskDescription.toLowerCase().includes('evaluate') ||
+          taskDescription.toLowerCase().includes('mp') ||
+          taskDescription.toLowerCase().includes('member of parliament') ||
+          taskDescription.toLowerCase().includes('resignation') ||
+          taskDescription.toLowerCase().includes('accountability') ||
+          taskDescription.toLowerCase().includes('annual report')) {
+
+        const executiveOutput = await this.runAgent(
+          'chief-executive',
+          taskDescription,
+          results.agents
+        );
+        results.agents['chief-executive'] = { phase: 'execution', output: executiveOutput };
       }
 
       // Save results

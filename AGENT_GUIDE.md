@@ -4,7 +4,32 @@ Detailed guide for working with the stopbleeding.ca AI agent team.
 
 ## Understanding the Agents
 
-### Editor Agent
+### Chief Executive (`agents/chief-executive/`)
+**Purpose**: Top leader and action executor — MP accountability
+**Capabilities**:
+- Evaluate MP performance using 8 objective criteria (scored 1-10)
+- Issue formal action documents (public statements, open letters, resignation demands, accountability reports)
+- Generate annual MP performance report cards
+- Synthesise intelligence from journalists and editors into actionable conclusions
+
+**When to use**:
+- Evaluating an MP's performance record
+- Taking formal action against underperforming MPs
+- Producing annual or periodic accountability reports
+- Making decisions based on journalist investigations and editor analysis
+
+**Commands**:
+```bash
+npm run executive:evaluate -- "MP Name"                         # Evaluate MP
+npm run executive:evaluate -- "MP Name" "Focus on housing"      # Evaluate with context
+npm run executive:action -- "MP Name" --type=letter             # Open letter
+npm run executive:action -- "MP Name" --type=resignation_demand # Resignation demand
+npm run executive:action -- "MP Name" --type=statement          # Public statement
+npm run executive:action -- "MP Name" --type=accountability_report  # Voter dossier
+npm run executive:annual-report -- 2025                         # Annual report card
+```
+
+### Editor Agent (`agents/editor/`)
 **Purpose**: Content creation and research
 **Capabilities**:
 - Web research on Canadian topics
@@ -19,7 +44,47 @@ Detailed guide for working with the stopbleeding.ca AI agent team.
 - Require analysis of Canadian data
 - Need research on trending topics
 
-### Developer Agent
+### Journalist Agent (`agents/journalist/`)
+**Purpose**: Deep-dive investigative journalism
+**Capabilities**:
+- Full investigation methodology (5 phases)
+- Evidence assembly and verification
+- Source development and protection
+- Data analysis and pattern detection
+- Investigation report generation
+
+**When to use**:
+- Statistical anomalies or data discrepancies need investigation
+- Following money trails or suspicious spending
+- Verifying or debunking viral claims
+- Exposing government or corporate wrongdoing
+- Providing evidence for Chief Executive evaluations
+
+**Commands**:
+```bash
+npm run journalist:investigate -- "Topic"          # Full investigation
+npm run journalist:assess                          # Assess triggers
+```
+
+### International Journalist (`agents/intljournalist/`)
+**Purpose**: International investigations affecting Canada
+**Capabilities**:
+- Global trade and geopolitical analysis
+- State-sponsored market interference detection
+- WTO violations analysis
+- Cross-border economic impact assessment
+
+**When to use**:
+- Investigating international impacts on Canadian interests
+- Trade disputes, economic coercion, or sanctions analysis
+- Providing global context for Chief Executive evaluations
+
+**Commands**:
+```bash
+npm run intl:investigate -- "Topic"                # International investigation
+```
+
+### Developer Agent (`agents/developer/`)
 **Purpose**: Technical implementation
 **Capabilities**:
 - Website development (Astro/React)
@@ -35,7 +100,7 @@ Detailed guide for working with the stopbleeding.ca AI agent team.
 - Deploying to production
 - Technical problem-solving
 
-### Workflow Coordinator
+### Workflow Coordinator (`agents/workflow/`)
 **Purpose**: Agent orchestration
 **Capabilities**:
 - Multi-agent task planning
@@ -57,13 +122,34 @@ User Request
     ↓
 Workflow Coordinator (analyzes task)
     ↓
-├─→ Editor Agent (content creation)
+├─→ Journalist Agent (investigation)
 │       ↓
-│   JSON Article Data
-│       ↓
-└─→ Developer Agent (implementation)
+│   Investigation Report JSON ──────────┐
+│                                       ↓
+├─→ Editor Agent (content creation)  Chief Executive (evaluation & action)
+│       ↓                               ↓
+│   JSON Article Data              Evaluation / Action JSON
+│       ↓                               ↓
+└─→ Developer Agent (impl.)       Published on stopbleeding.ca
         ↓
     Published Content
+```
+
+### Chief Executive Decision Flow
+```
+Journalist Investigation ─┐
+Editor Analysis ──────────┤
+International Reports ────┤
+Public Record (Hansard) ──┘
+        ↓
+Chief Executive: Evaluate MP (8 criteria, score 1-10)
+        ↓
+Rating: A | B | C | D | F
+        ↓
+┌─ A/B: Acknowledge good performance
+├─ C:   Note areas for improvement
+├─ D:   Public statement → Open letter
+└─ F:   Resignation demand → Accountability report
 ```
 
 ## Customizing Agents
@@ -114,11 +200,11 @@ export async function analyzeSentiment(text) {
 ## Data Schemas
 
 ### Article Schema
-See `agents/shared/types.js` for full TypeScript definitions.
+See `agents/shared/types.js` for full definitions.
 
 Required fields:
 - `title`: string
-- `category`: politics | economy | employment | education
+- `category`: politics | economy | employment | education | general
 - `date`: YYYY-MM-DD format
 - `content`: markdown string
 
@@ -126,6 +212,37 @@ Optional but recommended:
 - `charts`: array of chart data
 - `sources`: array of source references
 - `seo`: SEO metadata
+
+### MP Evaluation Schema
+See `agents/shared/types.js` — `validateEvaluation()` and `createEvaluationTemplate()`.
+
+Required fields:
+- `mp_name`: string — Full name of the MP
+- `date`: YYYY-MM-DD format
+- `scores`: object — 8 criteria each scored 1-10
+- `overall_rating`: A | B | C | D | F
+
+Score criteria:
+- `attendance_participation`, `legislative_effectiveness`, `constituency_service`
+- `alignment_with_canadian_interests`, `fiscal_responsibility`, `transparency_ethics`
+- `public_conduct`, `crisis_response`
+
+Optional but recommended:
+- `riding`, `province`, `party`, `evaluation_period`
+- `findings`: detailed per-criterion evidence
+- `concerns`, `recommendations`
+- `action_required`: none | statement | letter | resignation_demand | accountability_report
+- `sources`: evidence references
+
+### Action Document Schema
+- `type`: statement | open_letter | resignation_demand | accountability_report
+- `mp_name`, `riding`, `party`, `date`
+- `subject`: brief subject line
+- `content`: full text in markdown
+- `basis`: evaluation reference, key failures, evidence summary
+- `demands`: specific demands or expectations
+- `deadline`: response deadline
+- `follow_up`: consequences of inaction
 
 ### Chart Schema
 ```javascript
@@ -168,7 +285,32 @@ npm run editor:write -- "Chosen topic from research"
 npm run workflow:daily
 ```
 
-### Pattern 4: Complex Multi-Agent
+### Pattern 4: MP Accountability Pipeline
+```bash
+# 1. Investigate MP's record
+npm run journalist:investigate -- "MP Name voting record on housing"
+
+# 2. Evaluate based on evidence
+npm run executive:evaluate -- "MP Name"
+
+# 3. Review evaluation output
+cat content/evaluations/2025-mp-name-evaluation.json
+
+# 4. Take action if warranted
+npm run executive:action -- "MP Name" --type=letter
+```
+
+### Pattern 5: Annual Review Cycle
+```bash
+# 1. Evaluate key MPs throughout the year
+npm run executive:evaluate -- "MP Name 1"
+npm run executive:evaluate -- "MP Name 2"
+
+# 2. Generate annual report at year end
+npm run executive:annual-report -- 2025
+```
+
+### Pattern 6: Complex Multi-Agent
 ```bash
 # Orchestrator handles complexity
 node agents/shared/orchestrator.js \
@@ -246,10 +388,15 @@ import { AgentOrchestrator } from './agents/shared/orchestrator.js';
 
 const orchestrator = new AgentOrchestrator();
 
-// Custom workflow
+// Custom content workflow
 const research = await orchestrator.runAgent('editor', 'Research X');
 const article = await orchestrator.runAgent('editor', 'Write about X', { research });
 const implementation = await orchestrator.runAgent('developer', 'Build feature for X', { article });
+
+// Custom accountability workflow
+const investigation = await orchestrator.runAgent('journalist', 'Investigate MP voting record');
+const evaluation = await orchestrator.runAgent('chief-executive', 'Evaluate MP based on investigation', { investigation });
+const action = await orchestrator.runAgent('chief-executive', 'Write open letter based on evaluation', { evaluation });
 ```
 
 ### Custom Scheduling
@@ -322,7 +469,10 @@ jobs:
 
 - Agent prompts: `agents/*/prompt.md`
 - Type definitions: `agents/shared/types.js`
-- Example outputs: `content/articles/`
+- Article outputs: `content/articles/`
+- MP evaluations: `content/evaluations/`
+- Action documents: `content/actions/`
+- Investigations: `content/investigations/`
 - Workflow logs: `agents/workflow/`
 
 ---

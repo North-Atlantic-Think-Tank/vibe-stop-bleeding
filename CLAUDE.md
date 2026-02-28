@@ -4,17 +4,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-stopbleeding.ca is an AI-powered Canadian news analysis platform built using a **multi-agent system**. The project consists of three autonomous AI agents that collaborate to research, write, and publish Canadian news analysis articles.
+stopbleeding.ca is an AI-powered Canadian news analysis platform built using a **multi-agent system**. The project consists of autonomous AI agents that collaborate to research, write, evaluate, and publish Canadian news analysis and MP accountability content.
 
 ## Core Architecture
 
-### Three-Agent System
+### Agent System
 
 This is an **agent orchestration project**, not a traditional web application. The agents use Claude API to perform tasks:
 
-1. **Editor Agent** (`agents/editor/`): Researches Canadian news and writes analysis articles (800-1500 words)
-2. **Developer Agent** (`agents/developer/`): Plans and implements technical features
-3. **Workflow Coordinator** (`agents/workflow/`): Orchestrates multi-agent collaboration and manages publishing pipeline
+1. **Chief Executive** (`agents/chief-executive/`): Top leader and action executor — evaluates MP performance, issues accountability actions (open letters, resignation demands), and produces annual report cards
+2. **Editor Agent** (`agents/editor/`): Researches Canadian news and writes analysis articles (800-1500 words)
+3. **Journalist Agent** (`agents/journalist/`): Conducts deep-dive investigations into Canadian affairs
+4. **International Journalist** (`agents/intljournalist/`): Investigates global trade, geopolitics, and international impacts on Canada
+5. **Developer Agent** (`agents/developer/`): Plans and implements technical features
+6. **Workflow Coordinator** (`agents/workflow/`): Orchestrates multi-agent collaboration and manages publishing pipeline
 
 Each agent has:
 - `prompt.md`: System prompt defining the agent's role and capabilities
@@ -24,6 +27,8 @@ Each agent has:
 
 ```
 User/Cron → Workflow Coordinator → Editor Agent → JSON Article → Data Converter → Markdown/RSS → Website
+                                 → Journalist   → Investigation JSON → Chief Executive (evidence)
+                                 → Chief Executive → Evaluation/Action JSON → Publication
 ```
 
 All articles use a **standardized JSON schema** (defined in `agents/shared/types.js`):
@@ -49,9 +54,26 @@ cp .env.example .env                 # Create .env and add ANTHROPIC_API_KEY
 
 ### Agent Execution
 ```bash
+# Editor
 npm run editor:research              # Research trending Canadian topics
 npm run editor:research [category]   # Research specific category
 npm run editor:write -- "Topic"      # Write article on specific topic
+
+# Journalist
+npm run journalist:investigate -- "Topic"   # Conduct full investigation
+npm run journalist:assess                   # Assess investigation triggers
+npm run intl:investigate -- "Topic"         # International investigation
+
+# Chief Executive
+npm run executive:evaluate -- "MP Name"                        # Evaluate an MP's performance
+npm run executive:evaluate -- "MP Name" "Focus on housing"     # Evaluate with specific context
+npm run executive:action -- "MP Name" --type=letter            # Open letter to MP
+npm run executive:action -- "MP Name" --type=resignation_demand  # Demand resignation
+npm run executive:action -- "MP Name" --type=statement         # Public statement
+npm run executive:action -- "MP Name" --type=accountability_report  # Full accountability dossier
+npm run executive:annual-report -- 2025                        # Generate annual MP report card
+
+# Workflow
 npm run workflow:daily               # Full cycle: research → write → save
 npm run workflow:publish -- file.json # Convert JSON to markdown
 npm run workflow:covergen -- file.json # Generate cover images (all 3 styles)
@@ -109,6 +131,8 @@ const response = message.content[0].text;
 Use `agents/shared/types.js` functions:
 - `validateArticle(data)`: Validates article JSON against schema
 - `createArticleTemplate()`: Returns empty article template
+- `validateEvaluation(data)`: Validates MP evaluation JSON against schema
+- `createEvaluationTemplate()`: Returns empty evaluation template with all 8 scoring criteria
 
 Use `agents/shared/data-converter.js` for format conversion:
 - `jsonToMarkdown()`: Convert article JSON to markdown
@@ -169,6 +193,10 @@ const result = await generateCoverImage(articleData, 'aggressive');
 - **Article JSON**: `content/articles/*.json` (structured data from Editor)
 - **Article Markdown**: `content/articles/*.md` (published format)
 - **Research Drafts**: `content/drafts/research-*.md`
+- **MP Evaluations**: `content/evaluations/YYYY-mp-name-evaluation.json` (Chief Executive)
+- **Annual Reports**: `content/evaluations/YYYY-annual-report.json` (Chief Executive)
+- **Action Documents**: `content/actions/YYYY-MM-DD-mp-name-type.json` (Chief Executive)
+- **Investigations**: `content/investigations/investigation-*.json` (Journalist)
 - **Workflow Logs**: `agents/workflow/log-*.json`
 - **Chart Data**: `public/data/*-charts.json`
 - **Cover Images**: `public/images/covers/*-[style].jpeg` (AI-generated article covers)
@@ -203,6 +231,9 @@ Use cron or cloud scheduler (Vercel Cron, GitHub Actions) to trigger `npm run wo
 **Token Limits**:
 - Research tasks: 4000 tokens
 - Article writing: 8000 tokens
+- Investigations: 16000 tokens
+- MP evaluations: 12000 tokens
+- Annual reports: 16000 tokens
 - Adjust `max_tokens` based on task complexity
 
 **JSON Parsing**: Editor agent outputs may include markdown code blocks. Scripts use regex to extract JSON:
@@ -232,6 +263,7 @@ const orchestrator = new AgentOrchestrator();
 
 // Run single agent
 await orchestrator.runAgent('editor', 'Task description', context);
+await orchestrator.runAgent('chief-executive', 'Evaluate MP performance', context);
 
 // Run multi-agent workflow
 await orchestrator.runMultiAgentTask('Complex task requiring multiple agents');
@@ -248,9 +280,50 @@ The orchestrator:
 When modifying agents:
 1. Test individual agent: `npm run editor:research` or `npm run editor:write -- "test topic"`
 2. Check output quality in `content/` directory
-3. Verify JSON schema with `validateArticle()`
+3. Verify JSON schema with `validateArticle()` or `validateEvaluation()`
 4. Test full workflow: `npm run workflow:daily`
 5. Review logs in `agents/workflow/log-*.json`
+
+### Testing Chief Executive Agent
+1. Evaluate an MP: `npm run executive:evaluate -- "MP Name"`
+2. Check evaluation output in `content/evaluations/`
+3. Generate action: `npm run executive:action -- "MP Name" --type=letter`
+4. Check action output in `content/actions/`
+5. Generate annual report: `npm run executive:annual-report -- 2025`
+
+## Chief Executive Agent
+
+The Chief Executive is the top leader and action executor of stopbleeding.ca. This agent represents a concerned Canadian citizen who holds MPs accountable through objective, evidence-based evaluation.
+
+### MP Evaluation Framework
+
+MPs are scored 1-10 on 8 criteria:
+1. **Attendance & Participation** — House of Commons, committees, question period
+2. **Legislative Effectiveness** — Bills introduced, amendments, outcomes
+3. **Constituency Service** — Responsiveness, town halls, local issues
+4. **Alignment with Canadian Interests** — Voting record vs. platform promises
+5. **Fiscal Responsibility** — Budget positions, spending accountability
+6. **Transparency & Ethics** — Disclosures, conflicts of interest
+7. **Public Conduct** — Professionalism, respectful discourse
+8. **Crisis Response** — Effectiveness during emergencies
+
+**Rating Scale**: A (9-10), B (7-8), C (5-6), D (3-4), F (1-2)
+
+### Escalating Actions
+
+When evaluations reveal failure, the Chief Executive takes proportionate action:
+1. **Public Statement** — Formal notice of concerns
+2. **Open Letter** — Evidence-based letter demanding explanation/improvement
+3. **Resignation Demand** — Formal call to resign citing specific failures
+4. **Accountability Report** — Comprehensive dossier for voter awareness
+
+### Intelligence Integration
+
+The Chief Executive draws on intelligence from other agents:
+- Journalist investigations provide evidence for evaluations
+- Editor analysis provides context and data
+- International journalist reports provide global context
+- Evaluations and actions are published through the Workflow Coordinator
 
 ## Future Agent Possibilities
 
