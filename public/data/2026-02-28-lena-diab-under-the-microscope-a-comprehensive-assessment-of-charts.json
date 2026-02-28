@@ -1,0 +1,209 @@
+[
+  {
+    "id": "removal_backlog_chart",
+    "type": "bar",
+    "title": "Canada Removal Orders vs. Actual Removals (2019–2024)",
+    "description": "Comparison of outstanding enforceable removal orders against annual removals executed by CBSA",
+    "xAxisLabel": "Fiscal Year",
+    "yAxisLabel": "Number of Individuals",
+    "data": [
+      {
+        "year": "2019-20",
+        "outstandingOrders": 35000,
+        "actualRemovals": 17000
+      },
+      {
+        "year": "2020-21",
+        "outstandingOrders": 37000,
+        "actualRemovals": 8500
+      },
+      {
+        "year": "2021-22",
+        "outstandingOrders": 40000,
+        "actualRemovals": 9200
+      },
+      {
+        "year": "2022-23",
+        "outstandingOrders": 44000,
+        "actualRemovals": 13800
+      },
+      {
+        "year": "2023-24",
+        "outstandingOrders": 49000,
+        "actualRemovals": 16000
+      }
+    ],
+    "colours": [
+      "#c0392b",
+      "#2980b9"
+    ],
+    "notes": "2020-21 figures reflect COVID-19 border closure impact on removals. Data sourced from CBSA annual reports and PBO analysis."
+  },
+  {
+    "id": "ifhp_cost_chart",
+    "type": "line",
+    "title": "IFHP Program Expenditures 2019–2024 ($ Millions)",
+    "description": "Annual federal spending on the Interim Federal Health Program across all benefit tiers",
+    "xAxisLabel": "Fiscal Year",
+    "yAxisLabel": "Expenditure (CAD Millions)",
+    "data": [
+      {
+        "year": "2019-20",
+        "spending": 242
+      },
+      {
+        "year": "2020-21",
+        "spending": 275
+      },
+      {
+        "year": "2021-22",
+        "spending": 318
+      },
+      {
+        "year": "2022-23",
+        "spending": 390
+      },
+      {
+        "year": "2023-24",
+        "spending": 465
+      }
+    ],
+    "colour": "#8e44ad",
+    "notes": "Figures represent total IFHP expenditure including all coverage tiers. Source: IRCC departmental results reports, PBO costing analysis."
+  },
+  {
+    "id": "permanent_residents_chart",
+    "type": "bar",
+    "title": "Annual Permanent Resident Admissions to Canada (2019–2024)",
+    "description": "Year-over-year permanent resident intake showing trajectory under recent immigration levels plans",
+    "xAxisLabel": "Year",
+    "yAxisLabel": "Number of Permanent Residents",
+    "data": [
+      {
+        "year": "2019",
+        "admissions": 341180
+      },
+      {
+        "year": "2020",
+        "admissions": 184370
+      },
+      {
+        "year": "2021",
+        "admissions": 405330
+      },
+      {
+        "year": "2022",
+        "admissions": 431645
+      },
+      {
+        "year": "2023",
+        "admissions": 471550
+      },
+      {
+        "year": "2024",
+        "admissions": 395000
+      }
+    ],
+    "colour": "#27ae60",
+    "notes": "2020 reflects COVID-19 border restrictions. 2024 figure is preliminary estimate reflecting announced target reductions. Source: IRCC."
+  },
+  {
+    "id": "canadians_without_doctor_chart",
+    "type": "donut",
+    "title": "Canadians Without a Regular Family Doctor (2024)",
+    "description": "Share of Canadian population reporting no regular primary care provider",
+    "data": [
+      {
+        "label": "Have a regular family doctor",
+        "value": 84,
+        "colour": "#2ecc71"
+      },
+      {
+        "label": "No regular family doctor (~6.5M Canadians)",
+        "value": 16,
+        "colour": "#e74c3c"
+      }
+    ],
+    "notes": "Based on Statistics Canada 2023 Canadian Community Health Survey, updated 2024 estimates. Percentage rounded."
+  },
+  {
+    "id": "irb_backlog_chart",
+    "type": "line",
+    "title": "Immigration and Refugee Board Refugee Protection Division Backlog (2019–2024)",
+    "description": "Outstanding cases awaiting refugee hearing decisions at the IRB",
+    "xAxisLabel": "Year",
+    "yAxisLabel": "Pending Cases",
+    "data": [
+      {
+        "year": "2019",
+        "pendingCases": 71000
+      },
+      {
+        "year": "2020",
+        "pendingCases": 88000
+      },
+      {
+        "year": "2021",
+        "pendingCases": 108000
+      },
+      {
+        "year": "2022",
+        "pendingCases": 155000
+      },
+      {
+        "year": "2023",
+        "pendingCases": 198000
+      },
+      {
+        "year": "2024",
+        "pendingCases": 232000
+      }
+    ],
+    "colour": "#e67e22",
+    "notes": "Source: IRB statistical reports. Figures represent Refugee Protection Division inventory at year end."
+  },
+  {
+    "id": "competence_scorecard_chart",
+    "type": "horizontalBar",
+    "title": "Ministerial Performance Scorecard: Lena Diab",
+    "description": "Objective assessment of ministerial performance across key portfolio domains (scale 0–10)",
+    "xAxisLabel": "Score (0–10)",
+    "yAxisLabel": "Policy Domain",
+    "data": [
+      {
+        "domain": "Parliamentary Transparency",
+        "score": 2
+      },
+      {
+        "domain": "Healthcare Impact Modelling",
+        "score": 1
+      },
+      {
+        "domain": "Removal Backlog Management",
+        "score": 2.5
+      },
+      {
+        "domain": "Francophone Immigration",
+        "score": 7
+      },
+      {
+        "domain": "International Student Caps",
+        "score": 6
+      },
+      {
+        "domain": "IFHP Benefit Accuracy",
+        "score": 1
+      },
+      {
+        "domain": "Committee Engagement",
+        "score": 2
+      },
+      {
+        "domain": "Temp Resident Recalibration",
+        "score": 5
+      }
+    ],
+    "colour": "#2c3e50",
+    "notes": "Scores assigned by stopbleeding.ca editorial team based on documented outcomes, PBO reporting, parliamentary records, and departmental data. Scale is 0 (failing) to 10 (exemplary)."
+  }
+]

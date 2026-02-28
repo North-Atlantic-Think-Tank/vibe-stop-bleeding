@@ -84,10 +84,11 @@ export default function Chart({ chart }: ChartProps) {
   const chartData = transformChartData(chart.data);
 
   const renderChart = () => {
-    // Get all data keys except 'name' for multi-series charts
+    // Get all data keys except the x-axis key for multi-series charts
+    const xKeyName = chart.xKey || 'name';
     const dataKeys =
       chartData.length > 0
-        ? Object.keys(chartData[0]).filter((k) => k !== 'name')
+        ? Object.keys(chartData[0]).filter((k) => k !== 'name' && k !== xKeyName)
         : [];
 
     switch (chart.type) {
@@ -236,13 +237,18 @@ export default function Chart({ chart }: ChartProps) {
     }
   };
 
+  const rendered = renderChart();
+  if (!rendered) {
+    return null;
+  }
+
   return (
     <div className="my-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
       <h3 className="text-xl font-bold font-sans mb-4 text-gray-900">
         {chart.title}
       </h3>
       <ResponsiveContainer width="100%" height={400}>
-        {renderChart() as ReactElement}
+        {rendered as ReactElement}
       </ResponsiveContainer>
     </div>
   );
